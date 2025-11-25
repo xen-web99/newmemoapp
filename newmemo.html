@@ -20,20 +20,44 @@ body {
   border-radius: 20px;
   padding: 30px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
 h2 {
-  text-align: center;
+  margin: 0;
   color: #333;
-  margin-bottom: 30px;
   font-size: 2em;
+}
+
+#logoutBtn {
+  padding: 10px 20px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+#logoutBtn:hover {
+  background: #da190b;
+  transform: translateY(-2px);
 }
 
 #inputArea {
   background: #f8f9fa;
   padding: 20px;
   border-radius: 15px;
-  margin-bottom: 0px;
+  margin-bottom: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -86,7 +110,6 @@ h2 {
   gap: 8px;
   flex-shrink: 0;
   margin-top: -4px;
-
 }
 
 #inputButtons button {
@@ -208,7 +231,6 @@ h2 {
   transform: translateY(-2px);
 }
 
-/* スマホ対応：文字と横幅を縮める */
 @media (max-width: 600px) {
   #searchSortArea {
     gap: 5px;
@@ -232,7 +254,6 @@ h2 {
   }
 }
 
-/* 非常に小さい画面用 */
 @media (max-width: 400px) {
   #searchSortArea {
     gap: 4px;
@@ -475,7 +496,11 @@ h2 {
 
   h2 {
     font-size: 1.8em;
-    margin-bottom: 20px;
+  }
+
+  #logoutBtn {
+    padding: 8px 15px;
+    font-size: 12px;
   }
 
   #inputArea {
@@ -546,7 +571,10 @@ h2 {
 </head>
 <body>
 <div class="container">
-<h2>📝 メモアプリ</h2>
+<div class="header">
+  <h2>📝 メモアプリ</h2>
+  <button id="logoutBtn">ログアウト</button>
+</div>
 
 <div id="inputArea">
   <select id="labelSelect">
@@ -587,7 +615,6 @@ h2 {
 
 <div class="overlay" id="overlay"></div>
 
-<!-- メニュー -->
 <div class="menudialog" id="menuDialog">
   <p>メニュー</p>
   <button id="editBtn">✏️ 編集</button>
@@ -595,7 +622,6 @@ h2 {
   <button id="cancelBtn" onclick="closeDialogs()">キャンセル</button>
 </div>
 
-<!-- 編集ダイアログ -->
 <div class="dialog" id="editDialog">
   <p>メモを編集</p>
   <textarea id="editInput" rows="4"></textarea>
@@ -616,12 +642,46 @@ h2 {
   <button onclick="closeDialogs()">キャンセル</button>
 </div>
 
-<!-- 画像拡大表示 -->
 <div id="imageModal">
   <img id="modalImage" src="" alt="">
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+import { getDatabase, ref, push, onValue, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAIldTO-8jX6j8gHrOg5D0m-nCCSA-16Go",
+  authDomain: "memoapp-c54e6.firebaseapp.com",
+  databaseURL: "https://memoapp-c54e6-default-rtdb.firebaseio.com",
+  projectId: "memoapp-c54e6",
+  storageBucket: "memoapp-c54e6.firebasestorage.app",
+  messagingSenderId: "490272180038",
+  appId: "1:490272180038:web:f8c82853288e77d9440747"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const database = getDatabase(app);
+
+let currentUser = null;
+let memosData = {};
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    loadMemos();
+  } else {
+    window.location.href = 'index.html';
+  }
+});
+
+document.getElementById('logoutBtn').onclick = async () => {
+  await signOut(auth);
+  window.location.href = 'index.html';
+};
+
 const memoInput = document.getElementById('memoInput');
 const labelSelect = document.getElementById('labelSelect');
 const memoList = document.getElementById('memoList');
@@ -640,12 +700,11 @@ const editImagePreview = document.getElementById('editImagePreview');
 const imageModal = document.getElementById('imageModal');
 const modalImage = document.getElementById('modalImage');
 
-let selectedMemoIndex = null;
+let selectedMemoKey = null;
 let sortOrder = 'desc';
 let currentImages = [];
 let editImages = [];
 
-// 画像圧縮関数
 function compressImage(file, maxWidth = 800, quality = 0.8) {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -673,11 +732,9 @@ function compressImage(file, maxWidth = 800, quality = 0.8) {
   });
 }
 
-// 画像添付ボタン
 document.getElementById('attachBtn').onclick = () => imageInput.click();
 document.getElementById('editAttachBtn').onclick = () => editImageInput.click();
 
-// 画像選択(新規)
 imageInput.onchange = async (e) => {
   const files = Array.from(e.target.files);
   for (const file of files) {
@@ -688,7 +745,6 @@ imageInput.onchange = async (e) => {
   imageInput.value = '';
 };
 
-// 画像プレビュー表示
 function renderImagePreview() {
   imagePreview.innerHTML = '';
   currentImages.forEach((src, index) => {
@@ -696,19 +752,17 @@ function renderImagePreview() {
     div.className = 'preview-item';
     div.innerHTML = `
       <img src="${src}" alt="preview">
-      <button class="remove-btn" onclick="removeImage(${index})">×</button>
+      <button class="remove-btn" onclick="window.removeImage(${index})">×</button>
     `;
     imagePreview.appendChild(div);
   });
 }
 
-// 画像削除
-function removeImage(index) {
+window.removeImage = function(index) {
   currentImages.splice(index, 1);
   renderImagePreview();
-}
+};
 
-// 編集画像選択
 editImageInput.onchange = async (e) => {
   const files = Array.from(e.target.files);
   for (const file of files) {
@@ -719,7 +773,6 @@ editImageInput.onchange = async (e) => {
   editImageInput.value = '';
 };
 
-// 編集画像プレビュー
 function renderEditImagePreview() {
   editImagePreview.innerHTML = '';
   editImages.forEach((src, index) => {
@@ -727,34 +780,31 @@ function renderEditImagePreview() {
     div.className = 'preview-item';
     div.innerHTML = `
       <img src="${src}" alt="preview">
-      <button class="remove-btn" onclick="removeEditImage(${index})">×</button>
+      <button class="remove-btn" onclick="window.removeEditImage(${index})">×</button>
     `;
     editImagePreview.appendChild(div);
   });
 }
 
-// 編集画像削除
-function removeEditImage(index) {
+window.removeEditImage = function(index) {
   editImages.splice(index, 1);
   renderEditImagePreview();
-}
+};
 
-// 保存
-document.getElementById('saveBtn').onclick = () => {
+document.getElementById('saveBtn').onclick = async () => {
   const text = memoInput.value.trim();
   const label = labelSelect.value;
   if(!text && currentImages.length === 0) return;
-  const now = new Date();
+  
   const memo = { 
-    id: Date.now(), 
     text, 
-    date: now.toISOString(), 
+    date: new Date().toISOString(), 
     label,
     images: [...currentImages]
   };
-  const memos = JSON.parse(localStorage.getItem('memos') || "[]");
-  memos.push(memo);
-  localStorage.setItem('memos', JSON.stringify(memos));
+  
+  await push(ref(database, `memos/${currentUser.uid}`), memo);
+  
   memoInput.value = "";
   labelSelect.value = "";
   currentImages = [];
@@ -762,18 +812,37 @@ document.getElementById('saveBtn').onclick = () => {
   searchInput.value = "";
   labelSearchSelect.value = "";
   searchStatus.innerHTML = "";
-  displayMemos();
 };
 
-// メモ表示
+function loadMemos() {
+  const memosRef = ref(database, `memos/${currentUser.uid}`);
+  onValue(memosRef, (snapshot) => {
+    memosData = {};
+    if (snapshot.exists()) {
+      memosData = snapshot.val();
+    }
+    displayMemos();
+  });
+}
+
 function displayMemos(list = null) {
-  const memos = JSON.parse(localStorage.getItem('memos') || "[]");
-  let displayList = list || memos;
+  let displayList = [];
+  
+  if (list) {
+    displayList = list;
+  } else {
+    displayList = Object.keys(memosData).map(key => ({
+      key,
+      ...memosData[key]
+    }));
+  }
+  
   displayList.sort((a,b) => {
     const timeA = new Date(a.date).getTime();
     const timeB = new Date(b.date).getTime();
     return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
   });
+  
   memoList.innerHTML = "";
   displayList.forEach((memo) => {
     const div = document.createElement('div');
@@ -793,8 +862,8 @@ function displayMemos(list = null) {
     let imagesHtml = '';
     if (memo.images && memo.images.length > 0) {
       imagesHtml = '<div class="memo-images">';
-      memo.images.forEach((src, idx) => {
-        imagesHtml += `<img src="${src}" alt="image" onclick="showImageModal('${src}')">`;
+      memo.images.forEach((src) => {
+        imagesHtml += `<img src="${src}" alt="image" onclick="window.showImageModal('${src}')">`;
       });
       imagesHtml += '</div>';
     }
@@ -802,7 +871,7 @@ function displayMemos(list = null) {
     div.innerHTML = `
       <div class="memo-header">
         <span class="memo-text">${memo.text}</span>
-        <button class="menuBtn" onclick="openMenu(${memo.id})">⋮</button>
+        <button class="menuBtn" onclick="window.openMenu('${memo.key}')">⋮</button>
       </div>
       ${imagesHtml}
     `;
@@ -810,38 +879,30 @@ function displayMemos(list = null) {
   });
 }
 
-// 画像拡大表示
-function showImageModal(src) {
+window.showImageModal = function(src) {
   modalImage.src = src;
   imageModal.style.display = 'flex';
-}
+};
 
 imageModal.onclick = () => {
   imageModal.style.display = 'none';
 };
 
-// メニュー
-function openMenu(id){ 
-  selectedMemoIndex = id; 
+window.openMenu = function(key){ 
+  selectedMemoKey = key; 
   overlay.style.display='block'; 
   menuDialog.style.display='block'; 
-}
-
-// 削除
-document.getElementById('deleteBtn').onclick = () => {
-  if(selectedMemoIndex===null) return;
-  let memos = JSON.parse(localStorage.getItem('memos') || "[]");
-  memos = memos.filter(m => m.id !== selectedMemoIndex);
-  localStorage.setItem('memos', JSON.stringify(memos));
-  closeDialogs();
-  displayMemos();
 };
 
-// 編集
+document.getElementById('deleteBtn').onclick = async () => {
+  if(!selectedMemoKey) return;
+  await remove(ref(database, `memos/${currentUser.uid}/${selectedMemoKey}`));
+  closeDialogs();
+};
+
 document.getElementById('editBtn').onclick = () => {
-  if(selectedMemoIndex===null) return;
-  const memos = JSON.parse(localStorage.getItem('memos') || "[]");
-  const memo = memos.find(m => m.id === selectedMemoIndex);
+  if(!selectedMemoKey) return;
+  const memo = memosData[selectedMemoKey];
   editInput.value = memo.text;
   editLabelSelect.value = memo.label || "";
   editImages = memo.images ? [...memo.images] : [];
@@ -850,50 +911,45 @@ document.getElementById('editBtn').onclick = () => {
   editDialog.style.display='block';
 };
 
-// 更新
-document.getElementById('updateBtn').onclick = () => {
-  if(selectedMemoIndex===null) return;
-  const memos = JSON.parse(localStorage.getItem('memos') || "[]");
-  const memo = memos.find(m => m.id === selectedMemoIndex);
-  memo.text = editInput.value;
-  memo.label = editLabelSelect.value;
-  memo.images = [...editImages];
-  localStorage.setItem('memos', JSON.stringify(memos));
+document.getElementById('updateBtn').onclick = async () => {
+  if(!selectedMemoKey) return;
+  const updates = {
+    text: editInput.value,
+    label: editLabelSelect.value,
+    images: [...editImages]
+  };
+  await update(ref(database, `memos/${currentUser.uid}/${selectedMemoKey}`), updates);
   closeDialogs();
   searchInput.value = "";
   labelSearchSelect.value = "";
   searchStatus.innerHTML = "";
-  displayMemos();
 };
 
-// 並び替え
 document.getElementById('sortBtn').onclick = () => {
   sortOrder = sortOrder==='desc' ? 'asc' : 'desc';
   document.getElementById('sortBtn').innerText = sortOrder==='desc'?'⬇️ 新しい順':'⬆️ 古い順';
   displayMemos();
 };
 
-// リアルタイム検索機能
 function performSearch() {
   const keyword = searchInput.value.toLowerCase().trim();
   const selectedLabel = labelSearchSelect.value;
-  const memos = JSON.parse(localStorage.getItem('memos') || "[]");
   
-  let filtered = memos;
+  let filtered = Object.keys(memosData).map(key => ({
+    key,
+    ...memosData[key]
+  }));
   
-  // キーワードで絞り込み
   if (keyword !== "") {
     filtered = filtered.filter(m => m.text.toLowerCase().includes(keyword));
   }
   
-  // ラベルで絞り込み
   if (selectedLabel !== "") {
     filtered = filtered.filter(m => m.label === selectedLabel);
   }
   
   displayMemos(filtered);
   
-  // 検索状態の表示
   if (keyword === "" && selectedLabel === "") {
     searchStatus.innerHTML = "";
   } else {
@@ -918,22 +974,17 @@ function performSearch() {
   }
 }
 
-// リアルタイム検索のイベントリスナー
 searchInput.addEventListener('input', performSearch);
 labelSearchSelect.addEventListener('change', performSearch);
 
-// ダイアログ閉じる
-function closeDialogs(){ 
+window.closeDialogs = function(){ 
   overlay.style.display='none'; 
   menuDialog.style.display='none'; 
   editDialog.style.display='none'; 
-  selectedMemoIndex = null; 
-}
+  selectedMemoKey = null; 
+};
 
-overlay.addEventListener('click', closeDialogs);
-
-// 初期表示
-displayMemos();
+overlay.addEventListener('click', window.closeDialogs);
 </script>
 </body>
 </html>
