@@ -56,6 +56,31 @@
       background-color: #45a049;
     }
 
+    .login-box button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .link {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .link a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
     @media (max-width: 480px) {
       .login-box {
         padding: 20px 15px;
@@ -70,28 +95,80 @@
 <body>
   <div class="login-box">
     <h2>アカウント作成</h2>
-    <input type="text" id="newUsername" placeholder="ユーザー名">
-    <input type="password" id="newPassword" placeholder="パスワード">
+    <input type="email" id="email" placeholder="メールアドレス">
+    <input type="password" id="password" placeholder="パスワード（6文字以上）">
     <button id="createBtn">作成</button>
+    <div class="error-message" id="errorMessage"></div>
+    <div class="link">
+      <a href="index.html">既にアカウントをお持ちの方はこちら</a>
+    </div>
   </div>
 
-  <script>
-    document.getElementById("createBtn").addEventListener("click", function() {
-      const user = document.getElementById("newUsername").value.trim();
-      const pass = document.getElementById("newPassword").value.trim();
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 
-      if (!user || !pass) {
-        alert("ユーザー名とパスワードを入力してください");
+    // Firebaseの設定
+    const firebaseConfig = {
+      apiKey: "AIzaSyAIldTO-8jX6j8gHrOg5D0m-nCCSA-16Go",
+      authDomain: "memoapp-c54e6.firebaseapp.com",
+      databaseURL: "https://memoapp-c54e6-default-rtdb.firebaseio.com",
+      projectId: "memoapp-c54e6",
+      storageBucket: "memoapp-c54e6.firebasestorage.app",
+      messagingSenderId: "490272180038",
+      appId: "1:490272180038:web:f8c82853288e77d9440747"
+    };
+
+    // Firebaseを初期化
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const createBtn = document.getElementById("createBtn");
+    const errorMessage = document.getElementById("errorMessage");
+
+    createBtn.addEventListener("click", async function() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      
+      errorMessage.textContent = "";
+
+      // 入力チェック
+      if (!email || !password) {
+        errorMessage.textContent = "メールアドレスとパスワードを入力してください";
         return;
       }
 
-      // localStorageにアカウントを保存
-      const accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
-      accounts.push({ username: user, password: pass });
-      localStorage.setItem("accounts", JSON.stringify(accounts));
+      if (password.length < 6) {
+        errorMessage.textContent = "パスワードは6文字以上で入力してください";
+        return;
+      }
 
-      // アカウント作成後に自動でメモアプリに遷移
-      window.location.href = "newmemo.html";
+      // ボタンを無効化
+      createBtn.disabled = true;
+      createBtn.textContent = "作成中...";
+
+      try {
+        // Firebaseでユーザーを作成
+        await createUserWithEmailAndPassword(auth, email, password);
+        
+        // 成功したらメモアプリに移動
+        window.location.href = "newmemo.html";
+      } catch (error) {
+        // エラー処理
+        let message = "アカウント作成に失敗しました";
+        
+        if (error.code === 'auth/email-already-in-use') {
+          message = "このメールアドレスは既に使用されています";
+        } else if (error.code === 'auth/invalid-email') {
+          message = "メールアドレスの形式が正しくありません";
+        } else if (error.code === 'auth/weak-password') {
+          message = "パスワードが弱すぎます";
+        }
+        
+        errorMessage.textContent = message;
+        createBtn.disabled = false;
+        createBtn.textContent = "作成";
+      }
     });
   </script>
 </body>
