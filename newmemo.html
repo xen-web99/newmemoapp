@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メモアプリ</title>
+  <style>
+body { 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+  min-height: 100vh;
+  margin: 0; 
+  padding: 20px 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 2em;
+}
+
+#inputArea {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 0px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#labelSelect {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+#labelSelect:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.input-row {
+  position: relative;
+}
+
+#memoInput {
+  width: 100%;
+  height: 150px;
+  padding: 15px;
+  padding-right: 90px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+#memoInput:focus {
+  outline: none;
+  border-color: #ffffff;
+}
+
+#inputButtons {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-top: -4px;
+
+}
+
+#inputButtons button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+#attachBtn {
+  background: #ff9800;
+  color: white;
+}
+
+#attachBtn:hover {
+  background: #f57c00;
+  transform: translateY(-2px);
+}
+
+#saveBtn {
+  background: #4caf50;
+  color: white;
+}
+
+#saveBtn:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+}
+
+#imageInput, #editImageInput { 
+  display: none; 
+}
+
+#imagePreview, #editImagePreview {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.preview-item {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+}
+
+.preview-item .remove-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#searchSortArea {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: nowrap;
+}
+
+#labelSearchSelect {
+  flex-shrink: 0;
+  min-width: 100px;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+  background: white;
+  cursor: pointer;
+}
+
+#searchInput {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+#sortBtn {
+  flex-shrink: 0;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+  background: #9c27b0;
+  color: white;
+}
+
+#sortBtn:hover {
+  background: #7b1fa2;
+  transform: translateY(-2px);
+}
+
+/* スマホ対応：文字と横幅を縮める */
+@media (max-width: 600px) {
+  #searchSortArea {
+    gap: 5px;
+  }
+
+  #labelSearchSelect {
+    min-width: 70px;
+    padding: 10px 6px;
+    font-size: 13px;
+  }
+  
+  #searchInput {
+    min-width: 80px;
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+  
+  #sortBtn {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* 非常に小さい画面用 */
+@media (max-width: 400px) {
+  #searchSortArea {
+    gap: 4px;
+  }
+
+  #labelSearchSelect {
+    min-width: 60px;
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+  
+  #searchInput {
+    min-width: 60px;
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+  
+  #sortBtn {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+
+#searchStatus {
+  margin: 10px 0;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  text-align: center;
+  padding: 10px;
+  background: #fff3cd;
+  border-radius: 10px;
+}
+
+#searchStatus:empty {
+  display: none;
+}
+
+#memoList { 
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.memo { 
+  border-radius: 15px; 
+  padding: 20px; 
+  word-break: break-word;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.memo:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+.memo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.memo-text {
+  flex: 1;
+  margin-right: 8px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.memo-images {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.memo-images img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  transition: transform 0.2s;
+}
+
+.memo-images img:hover {
+  transform: scale(1.1);
+}
+
+.menuBtn { 
+  background: rgba(0, 0, 0, 0.05);
+  border: none; 
+  font-size: 20px; 
+  cursor: pointer; 
+  padding: 5px 10px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.menuBtn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.dialog, .menudialog { 
+  display: none; 
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  background: white; 
+  border-radius: 15px; 
+  padding: 25px; 
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); 
+  z-index: 10; 
+  width: 90%; 
+  max-width: 450px;
+  box-sizing: border-box;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.menudialog {
+  max-width: 200px;
+  padding: 15px;
+}
+
+.dialog p, .menudialog p {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.dialog textarea,
+.dialog select {
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  font-size: 16px;
+  box-sizing: border-box;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+}
+
+.dialog button, .menudialog button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#editBtn, #updateBtn {
+  background: #2196f3;
+  color: white;
+}
+
+#editBtn:hover, #updateBtn:hover {
+  background: #0b7dda;
+}
+
+#deleteBtn {
+  background: #f44336;
+  color: white;
+}
+
+#deleteBtn:hover {
+  background: #da190b;
+}
+
+#cancelBtn, .dialog button:last-child {
+  background: #9e9e9e;
+  color: white;
+}
+
+#cancelBtn:hover, .dialog button:last-child:hover {
+  background: #757575;
+}
+
+#editAttachBtn {
+  background: #ff9800;
+  color: white;
+}
+
+#editAttachBtn:hover {
+  background: #f57c00;
+}
+
+.overlay { 
+  display: none; 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background: rgba(0, 0, 0, 0.5); 
+  z-index: 5;
+  backdrop-filter: blur(2px);
+}
+
+#imageModal {
+  display: none;
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 20;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+#imageModal img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 10px 0;
+  }
+
+  .container {
+    padding: 15px;
+    border-radius: 15px;
+    margin: 0 10px;
+  }
+
+  h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+  }
+
+  #inputArea {
+    padding: 15px;
+  }
+
+  #labelSelect, #memoInput {
+    font-size: 16px;
+  }
+
+  #memoInput {
+    height: 100px;
+  }
+
+  .input-row {
+    flex-direction: row;
+  }
+
+  #inputButtons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #inputButtons button {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .preview-item {
+    width: 80px;
+    height: 80px;
+  }
+
+  .memo {
+    padding: 15px;
+  }
+
+  .memo-text {
+    font-size: 15px;
+  }
+
+  .memo-images img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .dialog, .menudialog {
+    width: 95%;
+    padding: 20px;
+    max-height: 85vh;
+  }
+
+  .dialog textarea {
+    font-size: 16px;
+  }
+
+  .menudialog {
+    max-width: 180px;
+  }
+
+  .dialog button, .menudialog button {
+    padding: 12px 16px;
+    font-size: 15px;
+    margin: 4px;
+  }
+}
+  </style>
+</head>
+<body>
+<div class="container">
+<h2>📝 メモアプリ</h2>
+
+<div id="inputArea">
+  <select id="labelSelect">
+    <option value="">ラベルを選択</option>
+    <option value="">なし</option>
+    <option value="yellow">🟡 黄色</option>
+    <option value="red">🔴 赤色</option>
+    <option value="green">🟢 緑色</option>
+    <option value="blue">🔵 青色</option>
+  </select>
+  <div class="input-row">
+    <textarea id="memoInput" placeholder="メモを入力..."></textarea>
+    <div id="inputButtons">
+      <button id="attachBtn">📷 画像</button>
+      <input type="file" id="imageInput" accept="image/*" multiple>
+      <button id="saveBtn">💾 保存</button>
+    </div>
+  </div>
+  <div id="imagePreview"></div>
+</div>
+
+<div id="searchSortArea">
+  <select id="labelSearchSelect">
+    <option value="">すべてのラベル</option>
+    <option value="yellow">🟡 黄色</option>
+    <option value="red">🔴 赤色</option>
+    <option value="green">🟢 緑色</option>
+    <option value="blue">🔵 青色</option>
+  </select>
+  <input type="text" id="searchInput" placeholder="キーワード検索...">
+  <button id="sortBtn">⬇️ 新しい順</button>
+</div>
+
+<div id="searchStatus"></div>
+
+<div id="memoList"></div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- メニュー -->
+<div class="menudialog" id="menuDialog">
+  <p>メニュー</p>
+  <button id="editBtn">✏️ 編集</button>
+  <button id="deleteBtn">🗑️ 削除</button><br>
+  <button id="cancelBtn" onclick="closeDialogs()">キャンセル</button>
+</div>
+
+<!-- 編集ダイアログ -->
+<div class="dialog" id="editDialog">
+  <p>メモを編集</p>
+  <textarea id="editInput" rows="4"></textarea>
+  <label>ラベル:
+    <select id="editLabelSelect">
+      <option value="">なし</option>
+      <option value="yellow">🟡 黄色</option>
+      <option value="red">🔴 赤</option>
+      <option value="green">🟢 緑</option>
+      <option value="blue">🔵 青</option>
+    </select>
+  </label>
+  <div id="editImagePreview"></div>
+  <button id="editAttachBtn">📎 画像追加</button>
+  <input type="file" id="editImageInput" accept="image/*" multiple>
+  <br>
+  <button id="updateBtn">✅ 更新</button>
+  <button onclick="closeDialogs()">キャンセル</button>
+</div>
+
+<!-- 画像拡大表示 -->
+<div id="imageModal">
+  <img id="modalImage" src="" alt="">
+</div>
+
+<script>
+const memoInput = document.getElementById('memoInput');
+const labelSelect = document.getElementById('labelSelect');
+const memoList = document.getElementById('memoList');
+const overlay = document.getElementById('overlay');
+const menuDialog = document.getElementById('menuDialog');
+const editDialog = document.getElementById('editDialog');
+const editInput = document.getElementById('editInput');
+const editLabelSelect = document.getElementById('editLabelSelect');
+const searchInput = document.getElementById('searchInput');
+const labelSearchSelect = document.getElementById('labelSearchSelect');
+const searchStatus = document.getElementById('searchStatus');
+const imageInput = document.getElementById('imageInput');
+const imagePreview = document.getElementById('imagePreview');
+const editImageInput = document.getElementById('editImageInput');
+const editImagePreview = document.getElementById('editImagePreview');
+const imageModal = document.getElementById('imageModal');
+const modalImage = document.getElementById('modalImage');
+
+let selectedMemoIndex = null;
+let sortOrder = 'desc';
+let currentImages = [];
+let editImages = [];
+
+// 画像圧縮関数
+function compressImage(file, maxWidth = 800, quality = 0.8) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// 画像添付ボタン
+document.getElementById('attachBtn').onclick = () => imageInput.click();
+document.getElementById('editAttachBtn').onclick = () => editImageInput.click();
+
+// 画像選択(新規)
+imageInput.onchange = async (e) => {
+  const files = Array.from(e.target.files);
+  for (const file of files) {
+    const compressed = await compressImage(file);
+    currentImages.push(compressed);
+  }
+  renderImagePreview();
+  imageInput.value = '';
+};
+
+// 画像プレビュー表示
+function renderImagePreview() {
+  imagePreview.innerHTML = '';
+  currentImages.forEach((src, index) => {
+    const div = document.createElement('div');
+    div.className = 'preview-item';
+    div.innerHTML = `
+      <img src="${src}" alt="preview">
+      <button class="remove-btn" onclick="removeImage(${index})">×</button>
+    `;
+    imagePreview.appendChild(div);
+  });
+}
+
+// 画像削除
+function removeImage(index) {
+  currentImages.splice(index, 1);
+  renderImagePreview();
+}
+
+// 編集画像選択
+editImageInput.onchange = async (e) => {
+  const files = Array.from(e.target.files);
+  for (const file of files) {
+    const compressed = await compressImage(file);
+    editImages.push(compressed);
+  }
+  renderEditImagePreview();
+  editImageInput.value = '';
+};
+
+// 編集画像プレビュー
+function renderEditImagePreview() {
+  editImagePreview.innerHTML = '';
+  editImages.forEach((src, index) => {
+    const div = document.createElement('div');
+    div.className = 'preview-item';
+    div.innerHTML = `
+      <img src="${src}" alt="preview">
+      <button class="remove-btn" onclick="removeEditImage(${index})">×</button>
+    `;
+    editImagePreview.appendChild(div);
+  });
+}
+
+// 編集画像削除
+function removeEditImage(index) {
+  editImages.splice(index, 1);
+  renderEditImagePreview();
+}
+
+// 保存
+document.getElementById('saveBtn').onclick = () => {
+  const text = memoInput.value.trim();
+  const label = labelSelect.value;
+  if(!text && currentImages.length === 0) return;
+  const now = new Date();
+  const memo = { 
+    id: Date.now(), 
+    text, 
+    date: now.toISOString(), 
+    label,
+    images: [...currentImages]
+  };
+  const memos = JSON.parse(localStorage.getItem('memos') || "[]");
+  memos.push(memo);
+  localStorage.setItem('memos', JSON.stringify(memos));
+  memoInput.value = "";
+  labelSelect.value = "";
+  currentImages = [];
+  renderImagePreview();
+  searchInput.value = "";
+  labelSearchSelect.value = "";
+  searchStatus.innerHTML = "";
+  displayMemos();
+};
+
+// メモ表示
+function displayMemos(list = null) {
+  const memos = JSON.parse(localStorage.getItem('memos') || "[]");
+  let displayList = list || memos;
+  displayList.sort((a,b) => {
+    const timeA = new Date(a.date).getTime();
+    const timeB = new Date(b.date).getTime();
+    return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
+  });
+  memoList.innerHTML = "";
+  displayList.forEach((memo) => {
+    const div = document.createElement('div');
+    div.className = 'memo';
+    div.dataset.label = memo.label || '';
+    
+    let bgColor = '';
+    switch(memo.label){
+      case 'yellow': bgColor='#FFEB3B'; break;
+      case 'red': bgColor='#F44336'; break;
+      case 'green': bgColor='#4CAF50'; break;
+      case 'blue': bgColor='#2196F3'; break;
+      default: bgColor='white';
+    }
+    div.style.backgroundColor = bgColor;
+    
+    let imagesHtml = '';
+    if (memo.images && memo.images.length > 0) {
+      imagesHtml = '<div class="memo-images">';
+      memo.images.forEach((src, idx) => {
+        imagesHtml += `<img src="${src}" alt="image" onclick="showImageModal('${src}')">`;
+      });
+      imagesHtml += '</div>';
+    }
+    
+    div.innerHTML = `
+      <div class="memo-header">
+        <span class="memo-text">${memo.text}</span>
+        <button class="menuBtn" onclick="openMenu(${memo.id})">⋮</button>
+      </div>
+      ${imagesHtml}
+    `;
+    memoList.appendChild(div);
+  });
+}
+
+// 画像拡大表示
+function showImageModal(src) {
+  modalImage.src = src;
+  imageModal.style.display = 'flex';
+}
+
+imageModal.onclick = () => {
+  imageModal.style.display = 'none';
+};
+
+// メニュー
+function openMenu(id){ 
+  selectedMemoIndex = id; 
+  overlay.style.display='block'; 
+  menuDialog.style.display='block'; 
+}
+
+// 削除
+document.getElementById('deleteBtn').onclick = () => {
+  if(selectedMemoIndex===null) return;
+  let memos = JSON.parse(localStorage.getItem('memos') || "[]");
+  memos = memos.filter(m => m.id !== selectedMemoIndex);
+  localStorage.setItem('memos', JSON.stringify(memos));
+  closeDialogs();
+  displayMemos();
+};
+
+// 編集
+document.getElementById('editBtn').onclick = () => {
+  if(selectedMemoIndex===null) return;
+  const memos = JSON.parse(localStorage.getItem('memos') || "[]");
+  const memo = memos.find(m => m.id === selectedMemoIndex);
+  editInput.value = memo.text;
+  editLabelSelect.value = memo.label || "";
+  editImages = memo.images ? [...memo.images] : [];
+  renderEditImagePreview();
+  menuDialog.style.display='none';
+  editDialog.style.display='block';
+};
+
+// 更新
+document.getElementById('updateBtn').onclick = () => {
+  if(selectedMemoIndex===null) return;
+  const memos = JSON.parse(localStorage.getItem('memos') || "[]");
+  const memo = memos.find(m => m.id === selectedMemoIndex);
+  memo.text = editInput.value;
+  memo.label = editLabelSelect.value;
+  memo.images = [...editImages];
+  localStorage.setItem('memos', JSON.stringify(memos));
+  closeDialogs();
+  searchInput.value = "";
+  labelSearchSelect.value = "";
+  searchStatus.innerHTML = "";
+  displayMemos();
+};
+
+// 並び替え
+document.getElementById('sortBtn').onclick = () => {
+  sortOrder = sortOrder==='desc' ? 'asc' : 'desc';
+  document.getElementById('sortBtn').innerText = sortOrder==='desc'?'⬇️ 新しい順':'⬆️ 古い順';
+  displayMemos();
+};
+
+// リアルタイム検索機能
+function performSearch() {
+  const keyword = searchInput.value.toLowerCase().trim();
+  const selectedLabel = labelSearchSelect.value;
+  const memos = JSON.parse(localStorage.getItem('memos') || "[]");
+  
+  let filtered = memos;
+  
+  // キーワードで絞り込み
+  if (keyword !== "") {
+    filtered = filtered.filter(m => m.text.toLowerCase().includes(keyword));
+  }
+  
+  // ラベルで絞り込み
+  if (selectedLabel !== "") {
+    filtered = filtered.filter(m => m.label === selectedLabel);
+  }
+  
+  displayMemos(filtered);
+  
+  // 検索状態の表示
+  if (keyword === "" && selectedLabel === "") {
+    searchStatus.innerHTML = "";
+  } else {
+    const labelNames = {
+      'yellow': '🟡 黄色',
+      'red': '🔴 赤色',
+      'green': '🟢 緑色',
+      'blue': '🔵 青色'
+    };
+    
+    let statusText = '🔍 検索中：';
+    if (keyword !== "") statusText += `キーワード「${keyword}」 `;
+    if (selectedLabel !== "") statusText += `ラベル「${labelNames[selectedLabel]}」 `;
+    statusText += `(${filtered.length}件) <span style="text-decoration:underline;">✖️ リセット</span>`;
+    
+    searchStatus.innerHTML = statusText;
+    searchStatus.onclick = () => {
+      searchInput.value = "";
+      labelSearchSelect.value = "";
+      performSearch();
+    };
+  }
+}
+
+// リアルタイム検索のイベントリスナー
+searchInput.addEventListener('input', performSearch);
+labelSearchSelect.addEventListener('change', performSearch);
+
+// ダイアログ閉じる
+function closeDialogs(){ 
+  overlay.style.display='none'; 
+  menuDialog.style.display='none'; 
+  editDialog.style.display='none'; 
+  selectedMemoIndex = null; 
+}
+
+overlay.addEventListener('click', closeDialogs);
+
+// 初期表示
+displayMemos();
+</script>
+</body>
+</html>
