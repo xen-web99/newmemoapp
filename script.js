@@ -16,7 +16,7 @@ document.getElementById("loginBtn").addEventListener("click", function() {
 
   if (user === lastAccount.username && pass === lastAccount.password) {
     // ログイン成功
-    window.location.href = "memo.html";
+    window.location.href = "newmemo.html";
   } else {
     alert("ユーザー名またはパスワードが間違っています");
   }
