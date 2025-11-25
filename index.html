@@ -1,23 +1,176 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ログイン画面</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      background: white;
+      padding: 30px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-sizing: border-box;
+      margin-top: 10px;
+    }
+
+    #loginBtn {
+      background-color: #4CAF50;
+    }
+
+    #loginBtn:hover {
+      background-color: #45a049;
+    }
+
+    #loginBtn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    #signupBtn {
+      background: #ff9800;
+    }
+
+    #signupBtn:hover {
+      background: #f57c00;
+    }
+
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+      .login-box {
+        padding: 20px 15px;
+      }
+      .login-box input, .login-box button {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="login-box">
     <h2>ログイン</h2>
-    <input type="text" id="username" placeholder="ユーザー名" style="width: 100%; box-sizing: border-box; font-size: 16px; padding: 12px;">
-    <input type="password" id="password" placeholder="パスワード" style="width: 100%; box-sizing: border-box; font-size: 16px; padding: 12px;">
-    <button id="loginBtn" style="width: 100%; box-sizing: border-box; font-size: 16px; padding: 12px;">ログイン</button>
-    <br>
-    <!-- 新規作成ボタン -->
-    <button id="signupBtn" style="margin-top: 10px; background: #ff9800; color: white; width: 100%; box-sizing: border-box; font-size: 16px; padding: 12px;">新規作成</button>
+    <input type="email" id="email" placeholder="メールアドレス">
+    <input type="password" id="password" placeholder="パスワード">
+    <button id="loginBtn">ログイン</button>
+    <button id="signupBtn">新規作成</button>
+    <div class="error-message" id="errorMessage"></div>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+
+    // Firebaseの設定
+    const firebaseConfig = {
+      apiKey: "AIzaSyAIldTO-8jX6j8gHrOg5D0m-nCCSA-16Go",
+      authDomain: "memoapp-c54e6.firebaseapp.com",
+      databaseURL: "https://memoapp-c54e6-default-rtdb.firebaseio.com",
+      projectId: "memoapp-c54e6",
+      storageBucket: "memoapp-c54e6.firebasestorage.app",
+      messagingSenderId: "490272180038",
+      appId: "1:490272180038:web:f8c82853288e77d9440747"
+    };
+
+    // Firebaseを初期化
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const errorMessage = document.getElementById("errorMessage");
+
+    // 新規作成ボタン
+    signupBtn.addEventListener("click", function() {
+      window.location.href = "signup.html";
+    });
+
+    // ログインボタン
+    loginBtn.addEventListener("click", async function() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      
+      errorMessage.textContent = "";
+
+      if (!email || !password) {
+        errorMessage.textContent = "メールアドレスとパスワードを入力してください";
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = "ログイン中...";
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "newmemo.html";
+      } catch (error) {
+        let message = "ログインに失敗しました";
+        
+        if (error.code === 'auth/user-not-found') {
+          message = "ユーザーが見つかりません";
+        } else if (error.code === 'auth/wrong-password') {
+          message = "パスワードが間違っています";
+        } else if (error.code === 'auth/invalid-email') {
+          message = "メールアドレスの形式が正しくありません";
+        } else if (error.code === 'auth/invalid-credential') {
+          message = "メールアドレスまたはパスワードが間違っています";
+        }
+        
+        errorMessage.textContent = message;
+        loginBtn.disabled = false;
+        loginBtn.textContent = "ログイン";
+      }
+    });
+
+    // Enterキーでログイン
+    document.getElementById("password").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        loginBtn.click();
+      }
+    });
+  </script>
 </body>
 </html>
