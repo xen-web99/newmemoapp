@@ -144,7 +144,16 @@
       loginBtn.textContent = "ログイン中...";
 
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        
+        // メール認証チェック
+        if (!userCredential.user.emailVerified) {
+          errorMessage.textContent = "メールアドレスが未認証です。受信したメールから認証を完了してください。";
+          loginBtn.disabled = false;
+          loginBtn.textContent = "ログイン";
+          return;
+        }
+        
         window.location.href = "newmemo.html";
       } catch (error) {
         let message = "ログインに失敗しました";
