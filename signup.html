@@ -96,7 +96,7 @@
   <div class="login-box">
     <h2>アカウント作成</h2>
     <input type="email" id="email" placeholder="メールアドレス">
-    <input type="password" id="password" placeholder="パスワード（8〜12文字。小文字を含み、大/数/記）">
+    <input type="password" id="password" placeholder="パスワード（8〜12文字、英小文字必須）">
     <button id="createBtn">作成</button>
     <div class="error-message" id="errorMessage"></div>
     <div class="link">
@@ -106,7 +106,7 @@
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 
     // Firebaseの設定
     const firebaseConfig = {
@@ -167,10 +167,16 @@
 
       try {
         // Firebaseでユーザーを作成
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         
-        // 成功したらメモアプリに移動
-        window.location.href = "newmemo.html";
+        // 確認メールを送信
+        await sendEmailVerification(userCredential.user);
+        
+        // 成功メッセージを表示
+        alert('アカウントを作成しました！\n\n確認メールを送信しました。\nメール内のリンクをクリックして、メールアドレスを確認してください。');
+        
+        // ログイン画面に移動
+        window.location.href = "index.html";
       } catch (error) {
         // エラー処理
         let message = "アカウント作成に失敗しました";
@@ -191,5 +197,3 @@
   </script>
 </body>
 </html>
-
-
