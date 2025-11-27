@@ -23,11 +23,39 @@ body {
   position: relative;
 }
 
-.header {
+  .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.verify-warning {
+  width: 100%;
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #856404;
+}
+
+.verify-warning button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: #ffc107;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.verify-warning button:hover {
+  background: #e0a800;
 }
 
 h2 {
@@ -576,6 +604,13 @@ h2 {
   <button id="logoutBtn">ログアウト</button>
 </div>
 
+<div id="verifyWarning" class="verify-warning" style="display: none;">
+  ⚠️ メールアドレスが未認証です<br>
+  確認メールを送信しました。メール内のリンクをクリックして認証を完了してください。
+  <br>
+  <button id="resendBtn">確認メールを再送信</button>
+</div>
+
 <div id="inputArea">
   <select id="labelSelect">
     <option value="">ラベルを選択</option>
@@ -648,7 +683,7 @@ h2 {
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+import { getAuth, onAuthStateChanged, signOut, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import { getDatabase, ref, push, onValue, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
 
 const firebaseConfig = {
@@ -671,11 +706,29 @@ let memosData = {};
 onAuthStateChanged(auth, (user) => {
   if (user) {
     currentUser = user;
+    
+    // メール認証チェック
+    if (!user.emailVerified) {
+      document.getElementById('verifyWarning').style.display = 'block';
+    } else {
+      document.getElementById('verifyWarning').style.display = 'none';
+    }
+    
     loadMemos();
   } else {
     window.location.href = 'index.html';
   }
 });
+
+// 確認メール再送信
+document.getElementById('resendBtn').onclick = async () => {
+  try {
+    await sendEmailVerification(currentUser);
+    alert('確認メールを再送信しました。メールをご確認ください。');
+  } catch (error) {
+    alert('メール送信に失敗しました。しばらく待ってから再度お試しください。');
+  }
+};
 
 document.getElementById('logoutBtn').onclick = async () => {
   await signOut(auth);
