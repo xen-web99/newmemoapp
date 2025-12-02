@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アイコン生成</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin: 20px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>PWAアイコン生成</h1>
+  <p>以下のアイコンを右クリック→「名前を付けて画像を保存」でダウンロードしてください</p>
+  
+  <div>
+    <h3>192x192px</h3>
+    <canvas id="icon192" width="192" height="192"></canvas>
+    <br>
+    <button onclick="downloadIcon(192)">icon-192.png をダウンロード</button>
+  </div>
+  
+  <div>
+    <h3>512x512px</h3>
+    <canvas id="icon512" width="512" height="512"></canvas>
+    <br>
+    <button onclick="downloadIcon(512)">icon-512.png をダウンロード</button>
+  </div>
+
+  <script>
+    function createIcon(size) {
+      const canvas = document.getElementById(`icon${size}`);
+      const ctx = canvas.getContext('2d');
+      
+      // 背景色
+      ctx.fillStyle = '#4CAF50';
+      ctx.fillRect(0, 0, size, size);
+      
+      // 絵文字
+      ctx.font = `${size * 0.6}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('📝', size / 2, size / 2);
+    }
+    
+    function downloadIcon(size) {
+      const canvas = document.getElementById(`icon${size}`);
+      const link = document.createElement('a');
+      link.download = `icon-${size}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+    
+    // ページ読み込み時にアイコンを生成
+    createIcon(192);
+    createIcon(512);
+  </script>
+</body>
+</html>
