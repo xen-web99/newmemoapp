@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4CAF50">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <title>ログイン画面</title>
   <style>
     body {
@@ -180,6 +183,13 @@
         loginBtn.click();
       }
     });
+
+    // Service Workerを登録
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/newmemoapp/service-worker.js')
+        .then(() => console.log('Service Worker 登録成功'))
+        .catch((error) => console.log('Service Worker 登録失敗:', error));
+    }
   </script>
 </body>
 </html>
