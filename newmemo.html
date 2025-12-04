@@ -929,7 +929,7 @@ function displayMemos(list = null) {
     div.innerHTML = `
       <div class="memo-header">
         <span class="memo-text">${memo.text}</span>
-        <button class="menuBtn" onclick="window.openMenu('${memo.key}')">⋮</button>
+        <button class="menuBtn" onclick="window.openMenu('${memo.key}')">編集</button>
       </div>
       ${imagesHtml}
     `;
@@ -1053,6 +1053,7 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
+
 
 
 
