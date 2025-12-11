@@ -6,107 +6,270 @@
   <meta name="theme-color" content="#4CAF50">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
-  <title>メモアプリ</title>
+  <title>メモアプリ Pro</title>
   <style>
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-color: #dee2e6;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --accent-color: #667eea;
+  --accent-hover: #5568d3;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --warning-color: #f59e0b;
+  --info-color: #3b82f6;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --bg-tertiary: #3d3d3d;
+  --text-primary: #f5f5f5;
+  --text-secondary: #a0a0a0;
+  --border-color: #404040;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body { 
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   min-height: 100vh;
-  margin: 0; 
   padding: 20px 0;
+  transition: var(--transition);
 }
 
 .container {
   max-width: 900px;
   margin: 0 auto;
-  background: white;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: none;
+  background: var(--bg-primary);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
   position: relative;
 }
 
-  .header {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  gap: 16px;
   flex-wrap: wrap;
-  gap: 10px;
 }
 
-.verify-warning {
-  width: 100%;
-  background: #fff3cd;
-  border: 2px solid #ffc107;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 20px;
-  text-align: center;
-  color: #856404;
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.verify-warning button {
-  margin-top: 10px;
-  padding: 8px 16px;
-  background: #ffc107;
-  color: #000;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 600;
+.logo-icon {
+  font-size: 32px;
+  animation: float 3s ease-in-out infinite;
 }
 
-.verify-warning button:hover {
-  background: #e0a800;
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
 }
 
 h2 {
   margin: 0;
-  color: #333;
-  font-size: 2em;
+  color: var(--text-primary);
+  font-size: 1.8em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.logo-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  border: 2px solid transparent;
+}
+
+.icon-btn:hover {
+  background: var(--bg-tertiary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.icon-btn.active {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
 }
 
 #logoutBtn {
   padding: 10px 20px;
-  background: #f44336;
+  background: var(--danger-color);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 #logoutBtn:hover {
-  background: #da190b;
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.verify-warning {
+  width: 100%;
+  background: #fef3c7;
+  border: 2px solid var(--warning-color);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #92400e;
+}
+
+[data-theme="dark"] .verify-warning {
+  background: #451a03;
+  color: #fbbf24;
+}
+
+.verify-warning button {
+  margin-top: 12px;
+  padding: 10px 20px;
+  background: var(--warning-color);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.verify-warning button:hover {
+  background: #d97706;
   transform: translateY(-2px);
 }
 
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  background: var(--bg-secondary);
+  padding: 6px;
+  border-radius: 16px;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: var(--transition);
+  position: relative;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+}
+
+.tab.active {
+  background: var(--bg-primary);
+  color: var(--accent-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-badge {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  background: var(--danger-color);
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
 #inputArea {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: var(--bg-secondary);
+  padding: 24px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid transparent;
+  transition: var(--transition);
+}
+
+#inputArea:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: var(--shadow-md);
 }
 
 #labelSelect {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 16px;
-  background: white;
+  padding: 14px;
+  margin-bottom: 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 15px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   cursor: pointer;
-  transition: border-color 0.3s;
+  transition: var(--transition);
 }
 
 #labelSelect:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .input-row {
@@ -115,63 +278,67 @@ h2 {
 
 #memoInput {
   width: 100%;
-  height: 110px;
-  padding: 15px;
+  height: 120px;
+  padding: 16px;
   padding-right: 90px;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  font-size: 15px;
   font-family: inherit;
   resize: none;
-  transition: border-color 0.3s;
-  box-sizing: border-box;
+  transition: var(--transition);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
 }
 
 #memoInput:focus {
   outline: none;
-  border-color: #ffffff;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 #inputButtons {
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 12px;
+  top: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  flex-shrink: 0;
-  margin-top: -4px;
+  gap: 10px;
 }
 
 #inputButtons button {
-  padding: 12px 20px;
+  padding: 12px 18px;
   border: none;
-  border-radius: 10px;
-  font-size: 15px;
+  border-radius: 12px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: var(--transition);
   white-space: nowrap;
+  box-shadow: var(--shadow-sm);
 }
 
 #attachBtn {
-  background: #ff9800;
+  background: var(--warning-color);
   color: white;
 }
 
 #attachBtn:hover {
-  background: #f57c00;
+  background: #d97706;
   transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 #saveBtn {
-  background: #4caf50;
+  background: var(--success-color);
   color: white;
 }
 
 #saveBtn:hover {
-  background: #45a049;
+  background: #059669;
   transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 #imageInput, #editImageInput { 
@@ -180,143 +347,131 @@ h2 {
 
 #imagePreview, #editImagePreview {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-top: 15px;
+  margin-top: 16px;
 }
 
 .preview-item {
   position: relative;
   width: 100px;
   height: 100px;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .preview-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 10px;
-  border: 2px solid #ddd;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  transition: var(--transition);
+}
+
+.preview-item:hover img {
+  transform: scale(1.05);
 }
 
 .preview-item .remove-btn {
   position: absolute;
   top: -8px;
   right: -8px;
-  background: #f44336;
+  background: var(--danger-color);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1;
   padding: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  font-weight: 700;
+}
+
+.preview-item .remove-btn:hover {
+  background: #dc2626;
+  transform: scale(1.1);
 }
 
 #searchSortArea {
   display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  flex-wrap: nowrap;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 #labelSearchSelect {
   flex-shrink: 0;
-  min-width: 100px;
-  padding: 12px;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 16px;
-  background: white;
+  min-width: 140px;
+  padding: 14px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 14px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   cursor: pointer;
+  transition: var(--transition);
 }
 
 #searchInput {
   flex: 1;
-  min-width: 120px;
-  padding: 12px;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 16px;
+  min-width: 200px;
+  padding: 14px 16px 14px 44px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 14px;
+  background: var(--bg-primary) url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%236c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>') no-repeat 14px center;
+  color: var(--text-primary);
+  transition: var(--transition);
+}
+
+#searchInput:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 #sortBtn {
   flex-shrink: 0;
-  padding: 12px 20px;
+  padding: 14px 24px;
   border: none;
-  border-radius: 10px;
-  font-size: 16px;
+  border-radius: 12px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: var(--transition);
   white-space: nowrap;
-  background: #9c27b0;
+  background: var(--accent-color);
   color: white;
+  box-shadow: var(--shadow-sm);
 }
 
 #sortBtn:hover {
-  background: #7b1fa2;
+  background: var(--accent-hover);
   transform: translateY(-2px);
-}
-
-@media (max-width: 600px) {
-  #searchSortArea {
-    gap: 5px;
-  }
-
-  #labelSearchSelect {
-    min-width: 70px;
-    padding: 10px 6px;
-    font-size: 13px;
-  }
-  
-  #searchInput {
-    min-width: 80px;
-    padding: 10px 8px;
-    font-size: 13px;
-  }
-  
-  #sortBtn {
-    padding: 10px 12px;
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 400px) {
-  #searchSortArea {
-    gap: 4px;
-  }
-
-  #labelSearchSelect {
-    min-width: 60px;
-    padding: 8px 4px;
-    font-size: 12px;
-  }
-  
-  #searchInput {
-    min-width: 60px;
-    padding: 8px 6px;
-    font-size: 12px;
-  }
-  
-  #sortBtn {
-    padding: 8px 10px;
-    font-size: 12px;
-  }
+  box-shadow: var(--shadow-md);
 }
 
 #searchStatus {
-  margin: 10px 0;
+  margin: 16px 0;
   font-size: 14px;
-  color: #666;
+  color: var(--text-secondary);
   cursor: pointer;
   text-align: center;
-  padding: 10px;
-  background: #fff3cd;
-  border-radius: 10px;
+  padding: 12px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border: 2px dashed var(--border-color);
+  transition: var(--transition);
+}
+
+#searchStatus:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-color);
 }
 
 #searchStatus:empty {
@@ -326,73 +481,169 @@ h2 {
 #memoList { 
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
 }
 
 .memo { 
-  border-radius: 15px; 
-  padding: 20px; 
+  border-radius: 20px; 
+  padding: 24px; 
   word-break: break-word;
-  box-sizing: border-box;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  position: relative;
+  border: 2px solid transparent;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .memo:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+  border-color: var(--border-color);
+}
+
+.memo.pinned {
+  border: 2px solid var(--accent-color);
+  box-shadow: var(--shadow-md);
+}
+
+.memo.pinned::before {
+  content: '📌';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 20px;
+  animation: pin-rotate 0.5s ease-out;
+}
+
+@keyframes pin-rotate {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(20deg); }
+  100% { transform: rotate(0deg); }
 }
 
 .memo-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.memo-content {
+  flex: 1;
+  margin-right: 12px;
 }
 
 .memo-text {
-  flex: 1;
-  margin-right: 8px;
-  color: #333;
-  line-height: 1.6;
+  color: var(--text-primary);
+  line-height: 1.7;
   white-space: pre-wrap;
   word-wrap: break-word;
+  font-size: 15px;
+}
+
+.memo-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.memo-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .memo-images {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .memo-images img {
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 100px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  transition: transform 0.2s;
+  border: 2px solid var(--border-color);
+  transition: var(--transition);
 }
 
 .memo-images img:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-color);
+}
+
+.memo-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-secondary);
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn:hover {
+  background: var(--bg-tertiary);
   transform: scale(1.1);
 }
 
-.menuBtn { 
-  background: rgba(0, 0, 0, 0.05);
-  border: none; 
-  font-size: 20px; 
-  cursor: pointer; 
-  padding: 5px 10px;
-  border-radius: 5px;
-  flex-shrink: 0;
-  transition: background 0.2s;
+.action-btn.favorite.active {
+  color: #ef4444;
+  animation: heartbeat 0.3s ease-in-out;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.action-btn.pin.active {
+  color: var(--accent-color);
+}
+
+.menuBtn {
+  background: var(--bg-secondary);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-secondary);
 }
 
 .menuBtn:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  transform: scale(1.05);
 }
 
 .dialog, .menudialog { 
@@ -401,86 +652,127 @@ h2 {
   top: 50%; 
   left: 50%; 
   transform: translate(-50%, -50%); 
-  background: white; 
-  border-radius: 15px; 
-  padding: 25px; 
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); 
-  z-index: 10; 
+  background: var(--bg-primary); 
+  border-radius: 24px; 
+  padding: 32px; 
+  box-shadow: var(--shadow-lg); 
+  z-index: 1001; 
   width: 90%; 
-  max-width: 450px;
-  box-sizing: border-box;
+  max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+  animation: dialogSlideIn 0.3s ease-out;
+}
+
+@keyframes dialogSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .menudialog {
-  max-width: 200px;
-  padding: 15px;
+  max-width: 240px;
+  padding: 20px;
 }
 
 .dialog p, .menudialog p {
-  margin: 0 0 15px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .dialog textarea,
 .dialog select {
   width: 100%;
-  margin: 10px 0;
-  padding: 12px;
-  font-size: 16px;
-  box-sizing: border-box;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
+  margin: 12px 0;
+  padding: 14px;
+  font-size: 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: var(--transition);
+}
+
+.dialog textarea {
+  min-height: 120px;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.6;
+}
+
+.dialog textarea:focus,
+.dialog select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.dialog-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
 }
 
 .dialog button, .menudialog button {
-  margin: 5px;
-  padding: 10px 20px;
+  flex: 1;
+  min-width: 120px;
+  padding: 14px 24px;
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: 12px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
-#editBtn, #updateBtn {
-  background: #2196f3;
+.dialog button:hover, .menudialog button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+#editBtn, #updateBtn, #restoreBtn {
+  background: var(--info-color);
   color: white;
 }
 
-#editBtn:hover, #updateBtn:hover {
-  background: #0b7dda;
+#editBtn:hover, #updateBtn:hover, #restoreBtn:hover {
+  background: #2563eb;
 }
 
-#deleteBtn {
-  background: #f44336;
+#deleteBtn, #permanentDeleteBtn {
+  background: var(--danger-color);
   color: white;
 }
 
-#deleteBtn:hover {
-  background: #da190b;
+#deleteBtn:hover, #permanentDeleteBtn:hover {
+  background: #dc2626;
 }
 
-#cancelBtn, .dialog button:last-child {
-  background: #9e9e9e;
-  color: white;
+#cancelBtn, #trashCancelBtn, .cancel-btn {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
-#cancelBtn:hover, .dialog button:last-child:hover {
-  background: #757575;
+#cancelBtn:hover, #trashCancelBtn:hover, .cancel-btn:hover {
+  background: var(--border-color);
 }
 
 #editAttachBtn {
-  background: #ff9800;
+  background: var(--warning-color);
   color: white;
 }
 
 #editAttachBtn:hover {
-  background: #f57c00;
+  background: #d97706;
 }
 
 .overlay { 
@@ -490,9 +782,15 @@ h2 {
   left: 0; 
   width: 100%; 
   height: 100%; 
-  background: rgba(0, 0, 0, 0.5); 
-  z-index: 5;
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.6); 
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 #imageModal {
@@ -502,18 +800,42 @@ h2 {
   left: 0;
   width: 100%; 
   height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 20;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 2000;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  animation: fadeIn 0.3s ease-out;
 }
 
 #imageModal img {
   max-width: 90%;
   max-height: 90%;
   object-fit: contain;
-  border-radius: 10px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+
+.empty-state-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.empty-state p {
+  font-size: 14px;
 }
 
 @media (max-width: 768px) {
@@ -522,82 +844,98 @@ h2 {
   }
 
   .container {
-    padding: 15px;
-    border-radius: 15px;
+    padding: 20px;
+    border-radius: 20px;
     margin: 0 10px;
   }
 
+  .logo-icon {
+    font-size: 28px;
+  }
+
   h2 {
-    font-size: 1.8em;
+    font-size: 1.5em;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
   }
 
   #logoutBtn {
-    padding: 8px 15px;
-    font-size: 12px;
+    padding: 8px 16px;
+    font-size: 13px;
   }
 
   #inputArea {
-    padding: 15px;
-  }
-
-  #labelSelect, #memoInput {
-    font-size: 16px;
+    padding: 16px;
   }
 
   #memoInput {
     height: 100px;
-  }
-
-  .input-row {
-    flex-direction: row;
+    padding-right: 90px;
   }
 
   #inputButtons {
-    flex-direction: column;
+    right: 8px;
+    top: 8px;
     gap: 8px;
   }
 
   #inputButtons button {
-    padding: 10px 16px;
-    font-size: 14px;
+    padding: 10px 14px;
+    font-size: 13px;
   }
 
-  .preview-item {
-    width: 80px;
-    height: 80px;
+  #searchSortArea {
+    gap: 8px;
+  }
+
+  #labelSearchSelect {
+    min-width: 100px;
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  #searchInput {
+    min-width: 120px;
+    padding: 12px 12px 12px 40px;
+    font-size: 13px;
+  }
+
+  #sortBtn {
+    padding: 12px 16px;
+    font-size: 13px;
   }
 
   .memo {
-    padding: 15px;
+    padding: 16px;
   }
 
   .memo-text {
-    font-size: 15px;
+    font-size: 14px;
+  }
+
+  .memo-images {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
   }
 
   .memo-images img {
-    width: 70px;
-    height: 70px;
+    height: 80px;
   }
 
   .dialog, .menudialog {
     width: 95%;
-    padding: 20px;
-    max-height: 85vh;
-  }
-
-  .dialog textarea {
-    font-size: 16px;
+    padding: 24px;
   }
 
   .menudialog {
-    max-width: 180px;
-  }
-
-  .dialog button, .menudialog button {
-    padding: 12px 16px;
-    font-size: 15px;
-    margin: 4px;
+    max-width: 200px;
   }
 }
   </style>
@@ -605,8 +943,17 @@ h2 {
 <body>
 <div class="container">
 <div class="header">
-  <h2>📝 メモアプリ</h2>
-  <button id="logoutBtn">ログアウト</button>
+  <div class="logo-section">
+    <div class="logo-icon"></div>
+    <div class="logo-text">
+      <h2>メモアプリ</h2>
+      
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" id="themeToggle" title="ダークモード切替">🌙</button>
+    <button id="logoutBtn">ログアウト</button>
+  </div>
 </div>
 
 <div id="verifyWarning" class="verify-warning" style="display: none;">
@@ -616,7 +963,13 @@ h2 {
   <button id="resendBtn">確認メールを再送信</button>
 </div>
 
-<div id="inputArea">
+<div class="tabs">
+  <button class="tab active" data-tab="all">📝すべて</button>
+  <button class="tab" data-tab="favorites">⭐お気に入り</button>
+  <button class="tab" data-tab="trash">🗑️ゴミ箱<span class="tab-badge" id="trashBadge" style="display: none;">0</span></button>
+</div>
+
+<div id="inputArea" style="display: block;">
   <select id="labelSelect">
     <option value="">ラベルを選択</option>
     <option value="">なし</option>
@@ -626,7 +979,7 @@ h2 {
     <option value="blue">🔵 青色</option>
   </select>
   <div class="input-row">
-    <textarea id="memoInput" placeholder="メモを入力..."></textarea>
+    <textarea id="memoInput" placeholder="メモを入力してください..."></textarea>
     <div id="inputButtons">
       <button id="attachBtn">📷 画像</button>
       <input type="file" id="imageInput" accept="image/*" multiple>
@@ -644,7 +997,7 @@ h2 {
     <option value="green">🟢 緑色</option>
     <option value="blue">🔵 青色</option>
   </select>
-  <input type="text" id="searchInput" placeholder="キーワード検索...">
+  <input type="text" id="searchInput" placeholder="検索...">
   <button id="sortBtn">⬇️ 新しい順</button>
 </div>
 
@@ -658,14 +1011,22 @@ h2 {
 <div class="menudialog" id="menuDialog">
   <p>メニュー</p>
   <button id="editBtn">✏️ 編集</button>
-  <button id="deleteBtn">🗑️ 削除</button><br>
-  <button id="cancelBtn" onclick="closeDialogs()">キャンセル</button>
+  <button id="deleteBtn">🗑️ ゴミ箱へ</button><br>
+  <button id="cancelBtn">キャンセル</button>
+</div>
+
+<div class="menudialog" id="trashMenuDialog">
+  <p>メニュー</p>
+  <button id="restoreBtn">♻️ 復元</button>
+  <button id="permanentDeleteBtn">🗑️ 完全削除</button><br>
+  <button id="trashCancelBtn">キャンセル</button>
 </div>
 
 <div class="dialog" id="editDialog">
   <p>メモを編集</p>
-  <textarea id="editInput" rows="4"></textarea>
-  <label>ラベル:
+  <textarea id="editInput"></textarea>
+  <label style="display: block; margin: 12px 0; color: var(--text-primary); font-weight: 600;">
+    ラベル:
     <select id="editLabelSelect">
       <option value="">なし</option>
       <option value="yellow">🟡 黄色</option>
@@ -677,9 +1038,10 @@ h2 {
   <div id="editImagePreview"></div>
   <button id="editAttachBtn">📎 画像追加</button>
   <input type="file" id="editImageInput" accept="image/*" multiple>
-  <br>
-  <button id="updateBtn">✅ 更新</button>
-  <button onclick="closeDialogs()">キャンセル</button>
+  <div class="dialog-buttons">
+    <button id="updateBtn">✅ 更新</button>
+    <button class="cancel-btn" id="editCancelBtn">キャンセル</button>
+  </div>
 </div>
 
 <div id="imageModal">
@@ -707,44 +1069,20 @@ const database = getDatabase(app);
 
 let currentUser = null;
 let memosData = {};
+let currentTab = 'all';
+let sortOrder = 'desc';
+let currentImages = [];
+let editImages = [];
+let selectedMemoKey = null;
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUser = user;
-    
-    // メール認証チェック
-    if (!user.emailVerified) {
-      document.getElementById('verifyWarning').style.display = 'block';
-    } else {
-      document.getElementById('verifyWarning').style.display = 'none';
-    }
-    
-    loadMemos();
-  } else {
-    window.location.href = 'index.html';
-  }
-});
-
-// 確認メール再送信
-document.getElementById('resendBtn').onclick = async () => {
-  try {
-    await sendEmailVerification(currentUser);
-    alert('確認メールを再送信しました。メールをご確認ください。');
-  } catch (error) {
-    alert('メール送信に失敗しました。しばらく待ってから再度お試しください。');
-  }
-};
-
-document.getElementById('logoutBtn').onclick = async () => {
-  await signOut(auth);
-  window.location.href = 'index.html';
-};
-
+// DOM要素の取得
+const themeToggle = document.getElementById('themeToggle');
 const memoInput = document.getElementById('memoInput');
 const labelSelect = document.getElementById('labelSelect');
 const memoList = document.getElementById('memoList');
 const overlay = document.getElementById('overlay');
 const menuDialog = document.getElementById('menuDialog');
+const trashMenuDialog = document.getElementById('trashMenuDialog');
 const editDialog = document.getElementById('editDialog');
 const editInput = document.getElementById('editInput');
 const editLabelSelect = document.getElementById('editLabelSelect');
@@ -758,11 +1096,96 @@ const editImagePreview = document.getElementById('editImagePreview');
 const imageModal = document.getElementById('imageModal');
 const modalImage = document.getElementById('modalImage');
 
-let selectedMemoKey = null;
-let sortOrder = 'desc';
-let currentImages = [];
-let editImages = [];
+// ダークモード設定
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+updateThemeIcon(savedTheme);
 
+themeToggle.addEventListener('click', () => {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  updateThemeIcon(newTheme);
+});
+
+function updateThemeIcon(theme) {
+  themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+  themeToggle.classList.toggle('active', theme === 'dark');
+}
+
+// 認証状態の監視
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    
+    if (!user.emailVerified) {
+      document.getElementById('verifyWarning').style.display = 'block';
+    } else {
+      document.getElementById('verifyWarning').style.display = 'none';
+    }
+    
+    loadMemos();
+    cleanupOldTrash();
+  } else {
+    window.location.href = 'index.html';
+  }
+});
+
+// 30日以上経過したゴミ箱のメモを自動削除
+async function cleanupOldTrash() {
+  const memosRef = ref(database, `memos/${currentUser.uid}`);
+  onValue(memosRef, async (snapshot) => {
+    if (snapshot.exists()) {
+      const memos = snapshot.val();
+      const now = new Date().getTime();
+      const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+      
+      for (const key in memos) {
+        const memo = memos[key];
+        if (memo.deleted && memo.deletedAt) {
+          const deletedTime = new Date(memo.deletedAt).getTime();
+          if (now - deletedTime > thirtyDays) {
+            await remove(ref(database, `memos/${currentUser.uid}/${key}`));
+          }
+        }
+      }
+    }
+  }, { onlyOnce: true });
+}
+
+// 確認メール再送信
+document.getElementById('resendBtn').addEventListener('click', async () => {
+  try {
+    await sendEmailVerification(currentUser);
+    alert('確認メールを再送信しました。メールをご確認ください。');
+  } catch (error) {
+    alert('メール送信に失敗しました。しばらく待ってから再度お試しください。');
+  }
+});
+
+// ログアウト
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await signOut(auth);
+  window.location.href = 'index.html';
+});
+
+// タブ切り替え
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentTab = tab.dataset.tab;
+    
+    // 入力エリアの表示/非表示
+    document.getElementById('inputArea').style.display = 
+      currentTab === 'trash' ? 'none' : 'block';
+    
+    displayMemos();
+  });
+});
+
+// 画像圧縮
 function compressImage(file, maxWidth = 800, quality = 0.8) {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -790,10 +1213,12 @@ function compressImage(file, maxWidth = 800, quality = 0.8) {
   });
 }
 
-document.getElementById('attachBtn').onclick = () => imageInput.click();
-document.getElementById('editAttachBtn').onclick = () => editImageInput.click();
+// 画像添付
+document.getElementById('attachBtn').addEventListener('click', () => {
+  imageInput.click();
+});
 
-imageInput.onchange = async (e) => {
+imageInput.addEventListener('change', async (e) => {
   const files = Array.from(e.target.files);
   for (const file of files) {
     const compressed = await compressImage(file);
@@ -801,27 +1226,35 @@ imageInput.onchange = async (e) => {
   }
   renderImagePreview();
   imageInput.value = '';
-};
+});
 
 function renderImagePreview() {
   imagePreview.innerHTML = '';
   currentImages.forEach((src, index) => {
     const div = document.createElement('div');
     div.className = 'preview-item';
-    div.innerHTML = `
-      <img src="${src}" alt="preview">
-      <button class="remove-btn" onclick="window.removeImage(${index})">×</button>
-    `;
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = 'preview';
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-btn';
+    removeBtn.textContent = '×';
+    removeBtn.addEventListener('click', () => {
+      currentImages.splice(index, 1);
+      renderImagePreview();
+    });
+    div.appendChild(img);
+    div.appendChild(removeBtn);
     imagePreview.appendChild(div);
   });
 }
 
-window.removeImage = function(index) {
-  currentImages.splice(index, 1);
-  renderImagePreview();
-};
+// 編集時の画像添付
+document.getElementById('editAttachBtn').addEventListener('click', () => {
+  editImageInput.click();
+});
 
-editImageInput.onchange = async (e) => {
+editImageInput.addEventListener('change', async (e) => {
   const files = Array.from(e.target.files);
   for (const file of files) {
     const compressed = await compressImage(file);
@@ -829,27 +1262,31 @@ editImageInput.onchange = async (e) => {
   }
   renderEditImagePreview();
   editImageInput.value = '';
-};
+});
 
 function renderEditImagePreview() {
   editImagePreview.innerHTML = '';
   editImages.forEach((src, index) => {
     const div = document.createElement('div');
     div.className = 'preview-item';
-    div.innerHTML = `
-      <img src="${src}" alt="preview">
-      <button class="remove-btn" onclick="window.removeEditImage(${index})">×</button>
-    `;
-    editImagePreview.appendChild(div);
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = 'preview';
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-btn';
+    removeBtn.textContent = '×';
+    removeBtn.addEventListener('click', () => {
+      editImages.splice(index, 1);
+      renderEditImagePreview();
+    });
+    div.appendChild(img);
+    div.appendChild(removeBtn);
+    imagePreview.appendChild(div);
   });
 }
 
-window.removeEditImage = function(index) {
-  editImages.splice(index, 1);
-  renderEditImagePreview();
-};
-
-document.getElementById('saveBtn').onclick = async () => {
+// メモ保存
+document.getElementById('saveBtn').addEventListener('click', async () => {
   const text = memoInput.value.trim();
   const label = labelSelect.value;
   if(!text && currentImages.length === 0) return;
@@ -858,7 +1295,10 @@ document.getElementById('saveBtn').onclick = async () => {
     text, 
     date: new Date().toISOString(), 
     label,
-    images: [...currentImages]
+    images: [...currentImages],
+    favorite: false,
+    pinned: false,
+    deleted: false
   };
   
   await push(ref(database, `memos/${currentUser.uid}`), memo);
@@ -870,8 +1310,9 @@ document.getElementById('saveBtn').onclick = async () => {
   searchInput.value = "";
   labelSearchSelect.value = "";
   searchStatus.innerHTML = "";
-};
+});
 
+// メモ読み込み
 function loadMemos() {
   const memosRef = ref(database, `memos/${currentUser.uid}`);
   onValue(memosRef, (snapshot) => {
@@ -879,10 +1320,24 @@ function loadMemos() {
     if (snapshot.exists()) {
       memosData = snapshot.val();
     }
+    updateTrashBadge();
     displayMemos();
   });
 }
 
+// ゴミ箱バッジ更新
+function updateTrashBadge() {
+  const trashCount = Object.values(memosData).filter(m => m.deleted).length;
+  const badge = document.getElementById('trashBadge');
+  if (trashCount > 0) {
+    badge.textContent = trashCount;
+    badge.style.display = 'block';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+// メモ表示
 function displayMemos(list = null) {
   let displayList = [];
   
@@ -895,70 +1350,226 @@ function displayMemos(list = null) {
     }));
   }
   
-  displayList.sort((a,b) => {
+  // タブによるフィルタリング
+  if (currentTab === 'all') {
+    displayList = displayList.filter(m => !m.deleted);
+  } else if (currentTab === 'favorites') {
+    displayList = displayList.filter(m => !m.deleted && m.favorite);
+  } else if (currentTab === 'trash') {
+    displayList = displayList.filter(m => m.deleted);
+  }
+  
+  // ピン留めを先頭に
+  const pinned = displayList.filter(m => m.pinned && !m.deleted);
+  const unpinned = displayList.filter(m => !m.pinned || m.deleted);
+  
+  pinned.sort((a,b) => {
     const timeA = new Date(a.date).getTime();
     const timeB = new Date(b.date).getTime();
     return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
   });
   
+  unpinned.sort((a,b) => {
+    const timeA = new Date(a.date).getTime();
+    const timeB = new Date(b.date).getTime();
+    return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
+  });
+  
+  displayList = [...pinned, ...unpinned];
+  
   memoList.innerHTML = "";
+  
+  if (displayList.length === 0) {
+    let emptyMessage = '';
+    if (currentTab === 'all') {
+      emptyMessage = '<div class="empty-state"><div class="empty-state-icon">📝</div><h3>メモがありません</h3><p>新しいメモを作成しましょう</p></div>';
+    } else if (currentTab === 'favorites') {
+      emptyMessage = '<div class="empty-state"><div class="empty-state-icon">❤️</div><h3>お気に入りがありません</h3><p>メモをお気に入りに追加しましょう</p></div>';
+    } else if (currentTab === 'trash') {
+      emptyMessage = '<div class="empty-state"><div class="empty-state-icon">🗑️</div><h3>ゴミ箱は空です</h3><p>削除されたメモは30日後に自動削除されます</p></div>';
+    }
+    memoList.innerHTML = emptyMessage;
+    return;
+  }
+  
   displayList.forEach((memo) => {
     const div = document.createElement('div');
     div.className = 'memo';
-    div.dataset.label = memo.label || '';
+    if (memo.pinned && !memo.deleted) div.classList.add('pinned');
     
     let bgColor = '';
     switch(memo.label){
-      case 'yellow': bgColor='#FFEB3B'; break;
-      case 'red': bgColor='#F44336'; break;
-      case 'green': bgColor='#4CAF50'; break;
-      case 'blue': bgColor='#2196F3'; break;
-      default: bgColor='white';
+      case 'yellow': bgColor='#FEF3C7'; break;
+      case 'red': bgColor='#FEE2E2'; break;
+      case 'green': bgColor='#D1FAE5'; break;
+      case 'blue': bgColor='#DBEAFE'; break;
+      default: bgColor='var(--bg-secondary)';
     }
     div.style.backgroundColor = bgColor;
     
-    let imagesHtml = '';
-    if (memo.images && memo.images.length > 0) {
-      imagesHtml = '<div class="memo-images">';
-      memo.images.forEach((src) => {
-        imagesHtml += `<img src="${src}" alt="image" onclick="window.showImageModal('${src}')">`;
-      });
-      imagesHtml += '</div>';
+    const date = new Date(memo.date);
+    const dateStr = formatDate(date);
+    
+    const memoHeader = document.createElement('div');
+    memoHeader.className = 'memo-header';
+    
+    const memoContent = document.createElement('div');
+    memoContent.className = 'memo-content';
+    
+    const memoText = document.createElement('span');
+    memoText.className = 'memo-text';
+    memoText.textContent = memo.text;
+    
+    const memoMeta = document.createElement('div');
+    memoMeta.className = 'memo-meta';
+    const memoDate = document.createElement('span');
+    memoDate.className = 'memo-date';
+    memoDate.textContent = '🕐 ' + dateStr;
+    memoMeta.appendChild(memoDate);
+    
+    memoContent.appendChild(memoText);
+    memoContent.appendChild(memoMeta);
+    
+    const memoActions = document.createElement('div');
+    memoActions.className = 'memo-actions';
+    
+    if (!memo.deleted) {
+      const favoriteBtn = document.createElement('button');
+      favoriteBtn.className = 'action-btn favorite' + (memo.favorite ? ' active' : '');
+      favoriteBtn.textContent = memo.favorite ? '⭐' : '☆';
+      favoriteBtn.title = 'お気に入り';
+      favoriteBtn.addEventListener('click', () => toggleFavorite(memo.key));
+      
+      const pinBtn = document.createElement('button');
+      pinBtn.className = 'action-btn pin' + (memo.pinned ? ' active' : '');
+      pinBtn.textContent = '📌';
+      pinBtn.title = 'ピン留め';
+      pinBtn.addEventListener('click', () => togglePin(memo.key));
+      
+      memoActions.appendChild(favoriteBtn);
+      memoActions.appendChild(pinBtn);
     }
     
-    div.innerHTML = `
-      <div class="memo-header">
-        <span class="memo-text">${memo.text}</span>
-        <button class="menuBtn" onclick="window.openMenu('${memo.key}')">編集</button>
-      </div>
-      ${imagesHtml}
-    `;
+    const menuBtn = document.createElement('button');
+    menuBtn.className = 'menuBtn';
+    menuBtn.textContent = '⋯';
+    menuBtn.addEventListener('click', () => openMenu(memo.key, memo.deleted));
+    memoActions.appendChild(menuBtn);
+    
+    memoHeader.appendChild(memoContent);
+    memoHeader.appendChild(memoActions);
+    div.appendChild(memoHeader);
+    
+    if (memo.images && memo.images.length > 0) {
+      const memoImages = document.createElement('div');
+      memoImages.className = 'memo-images';
+      memo.images.forEach((src) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'image';
+        img.addEventListener('click', () => showImageModal(src));
+        memoImages.appendChild(img);
+      });
+      div.appendChild(memoImages);
+    }
+    
     memoList.appendChild(div);
   });
 }
 
-window.showImageModal = function(src) {
+// 日付フォーマット
+function formatDate(date) {
+  const now = new Date();
+  const diff = now - date;
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+  
+  if (minutes < 1) return 'たった今';
+  if (minutes < 60) return `${minutes}分前`;
+  if (hours < 24) return `${hours}時間前`;
+  if (days < 7) return `${days}日前`;
+  
+  return `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`;
+}
+
+// 画像モーダル表示
+function showImageModal(src) {
   modalImage.src = src;
   imageModal.style.display = 'flex';
-};
+}
 
-imageModal.onclick = () => {
+imageModal.addEventListener('click', () => {
   imageModal.style.display = 'none';
-};
+});
 
-window.openMenu = function(key){ 
+// お気に入りトグル
+async function toggleFavorite(key) {
+  const memo = memosData[key];
+  await update(ref(database, `memos/${currentUser.uid}/${key}`), {
+    favorite: !memo.favorite
+  });
+}
+
+// ピン留めトグル
+async function togglePin(key) {
+  const memo = memosData[key];
+  await update(ref(database, `memos/${currentUser.uid}/${key}`), {
+    pinned: !memo.pinned
+  });
+}
+
+// メニュー開く
+function openMenu(key, isDeleted) { 
   selectedMemoKey = key; 
   overlay.style.display='block'; 
-  menuDialog.style.display='block'; 
-};
+  if (isDeleted) {
+    trashMenuDialog.style.display='block';
+  } else {
+    menuDialog.style.display='block';
+  }
+}
 
-document.getElementById('deleteBtn').onclick = async () => {
+// ダイアログ閉じる
+function closeDialogs() { 
+  overlay.style.display='none'; 
+  menuDialog.style.display='none'; 
+  trashMenuDialog.style.display='none';
+  editDialog.style.display='none'; 
+  selectedMemoKey = null; 
+}
+
+// ゴミ箱へ移動
+document.getElementById('deleteBtn').addEventListener('click', async () => {
   if(!selectedMemoKey) return;
-  await remove(ref(database, `memos/${currentUser.uid}/${selectedMemoKey}`));
+  await update(ref(database, `memos/${currentUser.uid}/${selectedMemoKey}`), {
+    deleted: true,
+    deletedAt: new Date().toISOString()
+  });
   closeDialogs();
-};
+});
 
-document.getElementById('editBtn').onclick = () => {
+// 復元
+document.getElementById('restoreBtn').addEventListener('click', async () => {
+  if(!selectedMemoKey) return;
+  await update(ref(database, `memos/${currentUser.uid}/${selectedMemoKey}`), {
+    deleted: false,
+    deletedAt: null
+  });
+  closeDialogs();
+});
+
+// 完全削除
+document.getElementById('permanentDeleteBtn').addEventListener('click', async () => {
+  if(!selectedMemoKey) return;
+  if (confirm('このメモを完全に削除しますか?\nこの操作は取り消せません。')) {
+    await remove(ref(database, `memos/${currentUser.uid}/${selectedMemoKey}`));
+    closeDialogs();
+  }
+});
+
+// 編集ダイアログ開く
+document.getElementById('editBtn').addEventListener('click', () => {
   if(!selectedMemoKey) return;
   const memo = memosData[selectedMemoKey];
   editInput.value = memo.text;
@@ -967,9 +1578,10 @@ document.getElementById('editBtn').onclick = () => {
   renderEditImagePreview();
   menuDialog.style.display='none';
   editDialog.style.display='block';
-};
+});
 
-document.getElementById('updateBtn').onclick = async () => {
+// メモ更新
+document.getElementById('updateBtn').addEventListener('click', async () => {
   if(!selectedMemoKey) return;
   const updates = {
     text: editInput.value,
@@ -981,14 +1593,16 @@ document.getElementById('updateBtn').onclick = async () => {
   searchInput.value = "";
   labelSearchSelect.value = "";
   searchStatus.innerHTML = "";
-};
+});
 
-document.getElementById('sortBtn').onclick = () => {
+// ソート切り替え
+document.getElementById('sortBtn').addEventListener('click', () => {
   sortOrder = sortOrder==='desc' ? 'asc' : 'desc';
-  document.getElementById('sortBtn').innerText = sortOrder==='desc'?'⬇️ 新しい順':'⬆️ 古い順';
+  document.getElementById('sortBtn').textContent = sortOrder==='desc'?'⬇️ 新しい順':'⬆️ 古い順';
   displayMemos();
-};
+});
 
+// 検索機能
 function performSearch() {
   const keyword = searchInput.value.toLowerCase().trim();
   const selectedLabel = labelSearchSelect.value;
@@ -1024,27 +1638,25 @@ function performSearch() {
     statusText += `(${filtered.length}件) <span style="text-decoration:underline;">✖️ リセット</span>`;
     
     searchStatus.innerHTML = statusText;
-    searchStatus.onclick = () => {
-      searchInput.value = "";
-      labelSearchSelect.value = "";
-      performSearch();
-    };
   }
 }
 
 searchInput.addEventListener('input', performSearch);
 labelSearchSelect.addEventListener('change', performSearch);
 
-window.closeDialogs = function(){ 
-  overlay.style.display='none'; 
-  menuDialog.style.display='none'; 
-  editDialog.style.display='none'; 
-  selectedMemoKey = null; 
-};
+searchStatus.addEventListener('click', () => {
+  searchInput.value = "";
+  labelSearchSelect.value = "";
+  performSearch();
+});
 
-overlay.addEventListener('click', window.closeDialogs);
+// キャンセルボタン
+document.getElementById('cancelBtn').addEventListener('click', closeDialogs);
+document.getElementById('trashCancelBtn').addEventListener('click', closeDialogs);
+document.getElementById('editCancelBtn').addEventListener('click', closeDialogs);
+overlay.addEventListener('click', closeDialogs);
 
-// Service Workerを登録
+// Service Worker登録
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/newmemoapp/service-worker.js')
     .then(() => console.log('Service Worker 登録成功'))
@@ -1053,9 +1665,3 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
-
-
-
-
-
-
