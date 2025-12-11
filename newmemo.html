@@ -552,6 +552,22 @@ h2 {
   font-size: 15px;
 }
 
+.memo[data-label]:not([data-label=""]) .memo-text {
+  color: #1a1a1a;
+}
+
+.memo[data-label]:not([data-label=""]) .memo-meta {
+  color: #4a5568;
+}
+
+.memo[data-label]:not([data-label=""]) .memo-text {
+  color: #1a1a1a;
+}
+
+.memo[data-label]:not([data-label=""]) .memo-meta {
+  color: #4a5568;
+}
+
 .memo-meta {
   display: flex;
   gap: 12px;
@@ -965,7 +981,7 @@ h2 {
 
 <div class="tabs">
   <button class="tab active" data-tab="all">📝すべて</button>
-  <button class="tab" data-tab="favorites">⭐お気に入り</button>
+  <button class="tab" data-tab="favorites">🌟お気に入り</button>
   <button class="tab" data-tab="trash">🗑️ゴミ箱<span class="tab-badge" id="trashBadge" style="display: none;">0</span></button>
 </div>
 
@@ -1384,7 +1400,7 @@ function displayMemos(list = null) {
     if (currentTab === 'all') {
       emptyMessage = '<div class="empty-state"><div class="empty-state-icon">📝</div><h3>メモがありません</h3><p>新しいメモを作成しましょう</p></div>';
     } else if (currentTab === 'favorites') {
-      emptyMessage = '<div class="empty-state"><div class="empty-state-icon">⭐️</div><h3>お気に入りがありません</h3><p>メモをお気に入りに追加しましょう</p></div>';
+      emptyMessage = '<div class="empty-state"><div class="empty-state-icon">🌟️</div><h3>お気に入りがありません</h3><p>メモをお気に入りに追加しましょう</p></div>';
     } else if (currentTab === 'trash') {
       emptyMessage = '<div class="empty-state"><div class="empty-state-icon">🗑️</div><h3>ゴミ箱は空です</h3><p>削除されたメモは30日後に自動削除されます</p></div>';
     }
@@ -1395,6 +1411,7 @@ function displayMemos(list = null) {
   displayList.forEach((memo) => {
     const div = document.createElement('div');
     div.className = 'memo';
+    div.dataset.label = memo.label || '';
     if (memo.pinned && !memo.deleted) div.classList.add('pinned');
     
     let bgColor = '';
@@ -1436,7 +1453,7 @@ function displayMemos(list = null) {
     if (!memo.deleted) {
       const favoriteBtn = document.createElement('button');
       favoriteBtn.className = 'action-btn favorite' + (memo.favorite ? ' active' : '');
-      favoriteBtn.textContent = memo.favorite ? '⭐' : '☆';
+      favoriteBtn.textContent = memo.favorite ? '🌟' : '⭐';
       favoriteBtn.title = 'お気に入り';
       favoriteBtn.addEventListener('click', () => toggleFavorite(memo.key));
       
