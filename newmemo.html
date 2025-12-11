@@ -202,6 +202,23 @@ h2 {
   border-radius: 16px;
 }
 
+@media (max-width: 480px) {
+  .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .tab {
+    flex: 1 1 auto;
+    padding: 10px 14px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+
 .tab {
   flex: 1;
   padding: 12px 20px;
@@ -1682,3 +1699,4 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
+
