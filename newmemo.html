@@ -398,16 +398,22 @@ h2 {
   transform: scale(1.1);
 }
 
+/* ─────────────────────────────
+   検索・ラベル・並び替え（完全レスポンシブ）
+───────────────────────────── */
 #searchSortArea {
   display: flex;
+  align-items: center;
   gap: 12px;
   margin-bottom: 24px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* ← 1行固定 */
+  width: 100%;
 }
 
+/* ラベル（すべて・お気に入りなど） */
 #labelSearchSelect {
   flex-shrink: 0;
-  min-width: 140px;
+  min-width: 130px;
   padding: 14px;
   border: 2px solid var(--border-color);
   border-radius: 12px;
@@ -416,11 +422,13 @@ h2 {
   color: var(--text-primary);
   cursor: pointer;
   transition: var(--transition);
+  white-space: nowrap; /* ← 改行しない */
 }
 
+/* 検索ボックス */
 #searchInput {
-  flex: 1;
-  min-width: 200px;
+  flex: 1;  /* ← 真ん中で伸びる */
+  min-width: 120px; /* ← iPhone SE 防止 */
   padding: 14px 16px 14px 44px;
   border: 2px solid var(--border-color);
   border-radius: 12px;
@@ -436,9 +444,10 @@ h2 {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+/* 新しい順ボタン */
 #sortBtn {
   flex-shrink: 0;
-  padding: 14px 24px;
+  padding: 14px 20px;
   border: none;
   border-radius: 12px;
   font-size: 14px;
@@ -457,6 +466,7 @@ h2 {
   box-shadow: var(--shadow-md);
 }
 
+/* 検索状態のバー */
 #searchStatus {
   margin: 16px 0;
   font-size: 14px;
@@ -477,6 +487,52 @@ h2 {
 
 #searchStatus:empty {
   display: none;
+}
+
+/* ───────────────
+   iPhone SE 含むスマホ最適化
+─────────────── */
+@media (max-width: 480px) {
+  #searchSortArea {
+    gap: 8px;
+  }
+
+  #labelSearchSelect {
+    min-width: 105px;
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  #searchInput {
+    min-width: 0; /* ← iPhone SE 必須：折り返し防止 */
+    padding: 10px 12px 10px 38px;
+    font-size: 13px;
+  }
+
+  #sortBtn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+/* ───────────────
+   タブレット（768px〜1024px）
+─────────────── */
+@media (min-width: 768px) and (max-width: 1024px) {
+  #searchSortArea {
+    gap: 14px;
+  }
+}
+
+/* ───────────────
+   PC（1025px〜）
+─────────────── */
+@media (min-width: 1025px) {
+  #searchSortArea {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 #memoList { 
