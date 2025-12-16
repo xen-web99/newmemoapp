@@ -1496,7 +1496,7 @@ function displayMemos(list = null) {
     if (currentTab === 'all') {
       emptyMessage = '<div class="empty-state"><div class="empty-state-icon">📝</div><h3>メモがありません</h3><p>新しいメモを作成しましょう</p></div>';
     } else if (currentTab === 'favorites') {
-      emptyMessage = '<div class="empty-state"><div class="empty-state-icon">❤️</div><h3>お気に入りがありません</h3><p>メモをお気に入りに追加しましょう</p></div>';
+      emptyMessage = '<div class="empty-state"><div class="empty-state-icon">⭐</div><h3>お気に入りがありません</h3><p>メモをお気に入りに追加しましょう</p></div>';
     } else if (currentTab === 'trash') {
       emptyMessage = '<div class="empty-state"><div class="empty-state-icon">🗑️</div><h3>ゴミ箱は空です</h3><p>削除されたメモは30日後に自動削除されます</p></div>';
     }
@@ -1868,5 +1868,6 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
+
 
 
