@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -19,7 +20,6 @@
   --warning-color: #f59e0b;
   --shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-
 [data-theme="dark"] {
   --bg-primary: #111827;
   --bg-secondary: #1f2937;
@@ -28,28 +28,23 @@
   --border-color: #374151;
   --shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 body { 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--bg-secondary);
   color: var(--text-primary);
   min-height: 100vh;
 }
-
 .container {
   max-width: 100%;
   margin: 0 auto;
   background: var(--bg-primary);
   min-height: 100vh;
 }
-
-/* ヘッダー - 完全1行固定 */
 .header {
   display: flex;
   justify-content: space-between;
@@ -64,7 +59,6 @@ body {
   flex-wrap: nowrap;
   min-height: 64px;
 }
-
 .logo-section {
   display: flex;
   align-items: center;
@@ -72,12 +66,10 @@ body {
   flex-shrink: 1;
   min-width: 0;
 }
-
 .logo-icon {
   font-size: 24px;
   flex-shrink: 0;
 }
-
 h2 {
   font-size: 20px;
   font-weight: 700;
@@ -86,14 +78,12 @@ h2 {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .header-actions {
   display: flex;
   gap: 8px;
   align-items: center;
   flex-shrink: 0;
 }
-
 .icon-btn {
   width: 40px;
   height: 40px;
@@ -108,16 +98,13 @@ h2 {
   justify-content: center;
   flex-shrink: 0;
 }
-
 .icon-btn:active {
   transform: scale(0.95);
 }
-
 .icon-btn.active {
   background: var(--accent-color);
   color: white;
 }
-
 #logoutBtn {
   padding: 10px 16px;
   background: var(--danger-color);
@@ -130,18 +117,14 @@ h2 {
   white-space: nowrap;
   flex-shrink: 0;
 }
-
 #logoutBtn:active {
   transform: scale(0.95);
 }
-
-/* メインコンテンツ */
 .main-content {
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
 }
-
 .verify-warning {
   background: #fef3c7;
   border: 1px solid var(--warning-color);
@@ -152,12 +135,10 @@ h2 {
   color: #92400e;
   font-size: 14px;
 }
-
 [data-theme="dark"] .verify-warning {
   background: #451a03;
   color: #fbbf24;
 }
-
 .verify-warning button {
   margin-top: 8px;
   padding: 8px 16px;
@@ -169,8 +150,6 @@ h2 {
   font-weight: 600;
   font-size: 13px;
 }
-
-/* タブ - 完全1行固定 */
 .tabs {
   display: flex;
   gap: 4px;
@@ -184,11 +163,9 @@ h2 {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
-
 .tabs::-webkit-scrollbar {
   display: none;
 }
-
 .tab {
   flex: 1 1 auto;
   min-width: fit-content;
@@ -204,13 +181,11 @@ h2 {
   position: relative;
   flex-shrink: 0;
 }
-
 .tab.active {
   background: var(--bg-primary);
   color: var(--accent-color);
   box-shadow: var(--shadow);
 }
-
 .tab-badge {
   position: absolute;
   top: 4px;
@@ -222,8 +197,6 @@ h2 {
   font-size: 10px;
   font-weight: 700;
 }
-
-/* 入力エリア */
 #inputArea {
   background: var(--bg-secondary);
   padding: 16px;
@@ -231,7 +204,25 @@ h2 {
   margin-bottom: 20px;
   border: 1px solid var(--border-color);
 }
-
+#titleInput {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+#titleInput::placeholder {
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+#titleInput:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
 #labelSelect {
   width: 100%;
   padding: 10px;
@@ -242,11 +233,9 @@ h2 {
   background: var(--bg-primary);
   color: var(--text-primary);
 }
-
 .input-row {
   position: relative;
 }
-
 #memoInput {
   width: 100%;
   height: 100px;
@@ -261,12 +250,10 @@ h2 {
   color: var(--text-primary);
   line-height: 1.5;
 }
-
 #memoInput:focus, #labelSelect:focus {
   outline: none;
   border-color: var(--accent-color);
 }
-
 #inputButtons {
   position: absolute;
   right: 8px;
@@ -275,7 +262,6 @@ h2 {
   flex-direction: column;
   gap: 8px;
 }
-
 #inputButtons button {
   padding: 10px 14px;
   border: none;
@@ -286,32 +272,26 @@ h2 {
   white-space: nowrap;
   flex-shrink: 0;
 }
-
 #attachBtn {
   background: var(--warning-color);
   color: white;
 }
-
 #saveBtn {
   background: var(--success-color);
   color: white;
 }
-
 #inputButtons button:active {
   transform: scale(0.95);
 }
-
 #imageInput, #editImageInput { 
   display: none; 
 }
-
 #imagePreview, #editImagePreview {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   margin-top: 12px;
 }
-
 .preview-item {
   position: relative;
   width: 80px;
@@ -319,7 +299,6 @@ h2 {
   border-radius: 8px;
   overflow: hidden;
 }
-
 .preview-item img {
   width: 100%;
   height: 100%;
@@ -327,7 +306,6 @@ h2 {
   border: 1px solid var(--border-color);
   border-radius: 8px;
 }
-
 .preview-item .remove-btn {
   position: absolute;
   top: -6px;
@@ -344,8 +322,6 @@ h2 {
   line-height: 1;
   padding: 0;
 }
-
-/* 検索エリア - 完全1行固定 */
 #searchSortArea {
   display: flex;
   align-items: stretch;
@@ -357,11 +333,9 @@ h2 {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
-
 #searchSortArea::-webkit-scrollbar {
   display: none;
 }
-
 #labelSearchSelect {
   flex-shrink: 0;
   min-width: fit-content;
@@ -373,7 +347,6 @@ h2 {
   color: var(--text-primary);
   white-space: nowrap;
 }
-
 #searchInput {
   flex: 1 1 auto;
   min-width: 100px;
@@ -384,12 +357,10 @@ h2 {
   background: var(--bg-primary) url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>') no-repeat 12px center;
   color: var(--text-primary);
 }
-
 #searchInput:focus {
   outline: none;
   border-color: var(--accent-color);
 }
-
 #sortBtn {
   flex-shrink: 0;
   min-width: fit-content;
@@ -403,11 +374,9 @@ h2 {
   color: white;
   cursor: pointer;
 }
-
 #sortBtn:active {
   transform: scale(0.95);
 }
-
 #searchStatus {
   margin: 12px 0;
   font-size: 13px;
@@ -419,18 +388,14 @@ h2 {
   border-radius: 8px;
   border: 1px dashed var(--border-color);
 }
-
 #searchStatus:empty {
   display: none;
 }
-
-/* メモリスト */
 #memoList { 
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-
 .memo { 
   border-radius: 12px;
   padding: 16px;
@@ -438,12 +403,15 @@ h2 {
   box-shadow: var(--shadow);
   border: 1px solid var(--border-color);
   position: relative;
+  transition: box-shadow 0.2s ease;
+  overflow: hidden;
 }
-
+.memo:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
 .memo.pinned {
   border: 2px solid var(--accent-color);
 }
-
 .memo.pinned::before {
   content: '📌';
   position: absolute;
@@ -451,51 +419,77 @@ h2 {
   left: 8px;
   font-size: 16px;
 }
-
 .memo-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 8px;
 }
-
 .memo-content {
   flex: 1;
   margin-right: 8px;
 }
-
+.memo-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.memo-text-wrapper {
+  position: relative;
+  overflow: hidden;
+  line-height: 1.6;
+  transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.memo-text-wrapper.collapsed {
+  max-height: 76.8px; /* 3行分 */
+}
+.memo-text-wrapper.collapsed::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(transparent, var(--bg-secondary));
+  pointer-events: none;
+}
 .memo-text {
   color: var(--text-primary);
-  line-height: 1.6;
+  font-size: 14px;
   white-space: pre-wrap;
   word-wrap: break-word;
-  font-size: 14px;
+  display: block;
 }
-
-.memo[data-label]:not([data-label=""]) .memo-text {
-  color: #1a1a1a;
+.toggle-btn {
+  background: none;
+  border: none;
+  color: var(--accent-color);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 0 6px;
+  display: block;
+  text-decoration: underline;
 }
-
-.memo[data-label]:not([data-label=""]) .memo-meta {
-  color: #4a5568;
+.toggle-btn:hover {
+  color: var(--accent-hover);
 }
-
 .memo-meta {
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-top: 8px;
+  margin-top: 12px;
   font-size: 12px;
   color: var(--text-secondary);
 }
-
 .memo-images {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
   gap: 8px;
   margin-top: 12px;
 }
-
 .memo-images img {
   width: 100%;
   height: 80px;
@@ -504,13 +498,11 @@ h2 {
   cursor: pointer;
   border: 1px solid var(--border-color);
 }
-
 .memo-actions {
   display: flex;
   gap: 6px;
   flex-shrink: 0;
 }
-
 .action-btn {
   width: 32px;
   height: 32px;
@@ -523,15 +515,12 @@ h2 {
   align-items: center;
   justify-content: center;
 }
-
 .action-btn:active {
   transform: scale(0.9);
 }
-
-.action-btn.pin.active {
+.action-btn.pin.active, .action-btn.favorite.active {
   color: var(--accent-color);
 }
-
 .menuBtn {
   background: var(--bg-secondary);
   border: none;
@@ -541,12 +530,9 @@ h2 {
   cursor: pointer;
   color: var(--text-secondary);
 }
-
 .menuBtn:active {
   transform: scale(0.95);
 }
-
-/* ダイアログ */
 .dialog, .menudialog { 
   display: none;
   position: fixed;
@@ -563,19 +549,17 @@ h2 {
   max-height: 90vh;
   overflow-y: auto;
 }
-
 .menudialog {
   max-width: 200px;
   padding: 16px;
 }
-
 .dialog p, .menudialog p {
   margin: 0 0 16px 0;
   font-size: 18px;
   font-weight: 700;
   color: var(--text-primary);
 }
-
+.dialog input[type="text"],
 .dialog textarea,
 .dialog select {
   width: 100%;
@@ -587,26 +571,27 @@ h2 {
   background: var(--bg-secondary);
   color: var(--text-primary);
 }
-
+.dialog input[type="text"] {
+  font-size: 16px;
+  font-weight: 600;
+}
 .dialog textarea {
   min-height: 100px;
   resize: vertical;
   font-family: inherit;
   line-height: 1.5;
 }
-
+.dialog input:focus,
 .dialog textarea:focus,
 .dialog select:focus {
   outline: none;
   border-color: var(--accent-color);
 }
-
 .dialog-buttons {
   display: flex;
   gap: 8px;
   margin-top: 16px;
 }
-
 .dialog button, .menudialog button {
   flex: 1;
   padding: 12px 20px;
@@ -616,22 +601,18 @@ h2 {
   font-weight: 600;
   cursor: pointer;
 }
-
 #editBtn, #updateBtn, #restoreBtn {
   background: var(--accent-color);
   color: white;
 }
-
 #deleteBtn, #permanentDeleteBtn {
   background: var(--danger-color);
   color: white;
 }
-
 #cancelBtn, #trashCancelBtn, .cancel-btn {
   background: var(--bg-secondary);
   color: var(--text-primary);
 }
-
 #editAttachBtn {
   background: var(--warning-color);
   color: white;
@@ -639,7 +620,6 @@ h2 {
   padding: 10px;
   margin: 10px 0;
 }
-
 .overlay { 
   display: none;
   position: fixed;
@@ -650,8 +630,6 @@ h2 {
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
-
-/* 画像モーダル */
 #imageModal {
   display: none;
   position: fixed;
@@ -664,13 +642,11 @@ h2 {
   justify-content: center;
   align-items: center;
 }
-
 #imageModal img {
   max-width: 90%;
   max-height: 90%;
   object-fit: contain;
 }
-
 .modal-nav {
   position: absolute;
   top: 50%;
@@ -687,15 +663,12 @@ h2 {
   justify-content: center;
   z-index: 2001;
 }
-
 .modal-nav.prev {
   left: 16px;
 }
-
 .modal-nav.next {
   right: 16px;
 }
-
 .modal-close {
   position: absolute;
   top: 16px;
@@ -712,7 +685,6 @@ h2 {
   justify-content: center;
   z-index: 2001;
 }
-
 .modal-counter {
   position: absolute;
   bottom: 24px;
@@ -725,78 +697,63 @@ h2 {
   font-size: 13px;
   z-index: 2001;
 }
-
 .empty-state {
   text-align: center;
   padding: 60px 20px;
   color: var(--text-secondary);
 }
-
 .empty-state-icon {
   font-size: 48px;
   margin-bottom: 12px;
   opacity: 0.5;
 }
-
 .empty-state h3 {
   font-size: 18px;
   margin-bottom: 6px;
   color: var(--text-primary);
 }
-
 .empty-state p {
   font-size: 14px;
 }
-
 @media (max-width: 768px) {
   .header {
     padding: 12px 16px;
     min-height: 56px;
   }
-
   h2 {
     font-size: 18px;
   }
-
   .logo-icon {
     font-size: 20px;
   }
-
   .icon-btn {
     width: 36px;
     height: 36px;
     font-size: 16px;
   }
-
   #logoutBtn {
     padding: 8px 12px;
     font-size: 13px;
   }
-
   .main-content {
     padding: 16px;
   }
-
   #memoInput {
     height: 90px;
     padding-right: 76px;
   }
-
   #inputButtons button {
     padding: 8px 12px;
     font-size: 12px;
   }
-
   .modal-nav {
     width: 40px;
     height: 40px;
     font-size: 20px;
   }
-
   .modal-nav.prev {
     left: 8px;
   }
-
   .modal-nav.next {
     right: 8px;
   }
@@ -804,7 +761,6 @@ h2 {
   </style>
 </head>
 <body>
-<!-- ヘッダー -->
 <div class="header">
   <div class="logo-section">
     <div class="logo-icon">✨</div>
@@ -815,26 +771,20 @@ h2 {
     <button id="logoutBtn">ログアウト</button>
   </div>
 </div>
-
-<!-- メインコンテンツ -->
 <div class="container">
 <div class="main-content">
-
 <div id="verifyWarning" class="verify-warning" style="display: none;">
   ⚠️ メールアドレスが未認証です。確認メールをご確認ください。
   <br>
   <button id="resendBtn">確認メールを再送信</button>
 </div>
-
-<!-- タブ -->
 <div class="tabs">
   <button class="tab active" data-tab="all">📝 すべて</button>
   <button class="tab" data-tab="favorites">⭐ お気に入り</button>
   <button class="tab" data-tab="trash">🗑️ ゴミ箱<span class="tab-badge" id="trashBadge" style="display: none;">0</span></button>
 </div>
-
-<!-- 入力エリア -->
 <div id="inputArea">
+  <input type="text" id="titleInput" placeholder="題名（任意）">
   <select id="labelSelect">
     <option value="">ラベルを選択</option>
     <option value="">なし</option>
@@ -853,8 +803,6 @@ h2 {
   </div>
   <div id="imagePreview"></div>
 </div>
-
-<!-- 検索エリア -->
 <div id="searchSortArea">
   <select id="labelSearchSelect">
     <option value="">すべてのラベル</option>
@@ -866,34 +814,26 @@ h2 {
   <input type="text" id="searchInput" placeholder="検索...">
   <button id="sortBtn">⬇️ 新しい順</button>
 </div>
-
 <div id="searchStatus"></div>
-
-<!-- メモリスト -->
 <div id="memoList"></div>
-
 </div>
 </div>
-
-<!-- オーバーレイとダイアログ -->
 <div class="overlay" id="overlay"></div>
-
 <div class="menudialog" id="menuDialog">
   <p>メニュー</p>
   <button id="editBtn">編集</button>
   <button id="deleteBtn">削除</button><br>
   <button id="cancelBtn">キャンセル</button>
 </div>
-
 <div class="menudialog" id="trashMenuDialog">
   <p>メニュー</p>
   <button id="restoreBtn">♻️ 復元</button>
   <button id="permanentDeleteBtn">🗑️ 完全削除</button><br>
   <button id="trashCancelBtn">キャンセル</button>
 </div>
-
 <div class="dialog" id="editDialog">
   <p>メモを編集</p>
+  <input type="text" id="editTitleInput" placeholder="題名（任意）">
   <textarea id="editInput"></textarea>
   <label style="display: block; margin: 8px 0; color: var(--text-primary); font-weight: 600; font-size: 14px;">
     ラベル:
@@ -913,7 +853,6 @@ h2 {
     <button class="cancel-btn" id="editCancelBtn">キャンセル</button>
   </div>
 </div>
-
 <div id="imageModal">
   <button class="modal-close" id="modalClose">×</button>
   <button class="modal-nav prev" id="modalPrev">‹</button>
@@ -921,12 +860,10 @@ h2 {
   <button class="modal-nav next" id="modalNext">›</button>
   <div class="modal-counter" id="modalCounter"></div>
 </div>
-
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 import { getDatabase, ref, push, onValue, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
-
 const firebaseConfig = {
   apiKey: "AIzaSyAIldTO-8jX6j8gHrOg5D0m-nCCSA-16Go",
   authDomain: "memoapp-c54e6.firebaseapp.com",
@@ -936,11 +873,9 @@ const firebaseConfig = {
   messagingSenderId: "490272180038",
   appId: "1:490272180038:web:f8c82853288e77d9440747"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
-
 let currentUser = null;
 let memosData = {};
 let currentTab = 'all';
@@ -948,8 +883,8 @@ let sortOrder = 'desc';
 let currentImages = [];
 let editImages = [];
 let selectedMemoKey = null;
-
 const themeToggle = document.getElementById('themeToggle');
+const titleInput = document.getElementById('titleInput');
 const memoInput = document.getElementById('memoInput');
 const labelSelect = document.getElementById('labelSelect');
 const memoList = document.getElementById('memoList');
@@ -957,6 +892,7 @@ const overlay = document.getElementById('overlay');
 const menuDialog = document.getElementById('menuDialog');
 const trashMenuDialog = document.getElementById('trashMenuDialog');
 const editDialog = document.getElementById('editDialog');
+const editTitleInput = document.getElementById('editTitleInput');
 const editInput = document.getElementById('editInput');
 const editLabelSelect = document.getElementById('editLabelSelect');
 const searchInput = document.getElementById('searchInput');
@@ -972,14 +908,11 @@ const modalClose = document.getElementById('modalClose');
 const modalPrev = document.getElementById('modalPrev');
 const modalNext = document.getElementById('modalNext');
 const modalCounter = document.getElementById('modalCounter');
-
 let currentImageIndex = 0;
 let currentImageList = [];
-
 const savedTheme = localStorage.getItem('theme') || 'light';
 document.documentElement.setAttribute('data-theme', savedTheme);
 updateThemeIcon(savedTheme);
-
 themeToggle.addEventListener('click', () => {
   const currentTheme = document.documentElement.getAttribute('data-theme');
   const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -987,12 +920,10 @@ themeToggle.addEventListener('click', () => {
   localStorage.setItem('theme', newTheme);
   updateThemeIcon(newTheme);
 });
-
 function updateThemeIcon(theme) {
   themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
   themeToggle.classList.toggle('active', theme === 'dark');
 }
-
 onAuthStateChanged(auth, (user) => {
   if (user) {
     currentUser = user;
@@ -1007,7 +938,6 @@ onAuthStateChanged(auth, (user) => {
     window.location.href = 'index.html';
   }
 });
-
 async function cleanupOldTrash() {
   const memosRef = ref(database, `memos/${currentUser.uid}`);
   onValue(memosRef, async (snapshot) => {
@@ -1027,7 +957,6 @@ async function cleanupOldTrash() {
     }
   }, { onlyOnce: true });
 }
-
 document.getElementById('resendBtn').addEventListener('click', async () => {
   try {
     await sendEmailVerification(currentUser);
@@ -1036,12 +965,10 @@ document.getElementById('resendBtn').addEventListener('click', async () => {
     alert('メール送信に失敗しました。しばらく待ってから再度お試しください。');
   }
 });
-
 document.getElementById('logoutBtn').addEventListener('click', async () => {
   await signOut(auth);
   window.location.href = 'index.html';
 });
-
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1052,7 +979,6 @@ document.querySelectorAll('.tab').forEach(tab => {
     displayMemos();
   });
 });
-
 function compressImage(file, maxWidth = 800, quality = 0.8) {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -1077,11 +1003,9 @@ function compressImage(file, maxWidth = 800, quality = 0.8) {
     reader.readAsDataURL(file);
   });
 }
-
 document.getElementById('attachBtn').addEventListener('click', () => {
   imageInput.click();
 });
-
 imageInput.addEventListener('change', async (e) => {
   const files = Array.from(e.target.files);
   for (const file of files) {
@@ -1091,7 +1015,6 @@ imageInput.addEventListener('change', async (e) => {
   renderImagePreview();
   imageInput.value = '';
 });
-
 function renderImagePreview() {
   imagePreview.innerHTML = '';
   currentImages.forEach((src, index) => {
@@ -1112,11 +1035,9 @@ function renderImagePreview() {
     imagePreview.appendChild(div);
   });
 }
-
 document.getElementById('editAttachBtn').addEventListener('click', () => {
   editImageInput.click();
 });
-
 editImageInput.addEventListener('change', async (e) => {
   const files = Array.from(e.target.files);
   for (const file of files) {
@@ -1126,7 +1047,6 @@ editImageInput.addEventListener('change', async (e) => {
   renderEditImagePreview();
   editImageInput.value = '';
 });
-
 function renderEditImagePreview() {
   editImagePreview.innerHTML = '';
   editImages.forEach((src, index) => {
@@ -1147,12 +1067,13 @@ function renderEditImagePreview() {
     editImagePreview.appendChild(div);
   });
 }
-
 document.getElementById('saveBtn').addEventListener('click', async () => {
+  const title = titleInput.value.trim();
   const text = memoInput.value.trim();
   const label = labelSelect.value;
-  if(!text && currentImages.length === 0) return;
+  if(!text && !title && currentImages.length === 0) return;
   const memo = { 
+    title,
     text, 
     date: new Date().toISOString(), 
     label,
@@ -1162,6 +1083,7 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
     deleted: false
   };
   await push(ref(database, `memos/${currentUser.uid}`), memo);
+  titleInput.value = "";
   memoInput.value = "";
   labelSelect.value = "";
   currentImages = [];
@@ -1170,7 +1092,6 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
   labelSearchSelect.value = "";
   searchStatus.innerHTML = "";
 });
-
 function loadMemos() {
   const memosRef = ref(database, `memos/${currentUser.uid}`);
   onValue(memosRef, (snapshot) => {
@@ -1182,7 +1103,6 @@ function loadMemos() {
     displayMemos();
   });
 }
-
 function updateTrashBadge() {
   const trashCount = Object.values(memosData).filter(m => m.deleted).length;
   const badge = document.getElementById('trashBadge');
@@ -1193,7 +1113,6 @@ function updateTrashBadge() {
     badge.style.display = 'none';
   }
 }
-
 function displayMemos(list = null) {
   let displayList = [];
   if (list) {
@@ -1213,60 +1132,45 @@ function displayMemos(list = null) {
   }
   const pinned = displayList.filter(m => m.pinned && !m.deleted);
   const unpinned = displayList.filter(m => !m.pinned || m.deleted);
-  pinned.sort((a,b) => {
-    const timeA = new Date(a.date).getTime();
-    const timeB = new Date(b.date).getTime();
-    return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
-  });
-  unpinned.sort((a,b) => {
-    const timeA = new Date(a.date).getTime();
-    const timeB = new Date(b.date).getTime();
-    return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
-  });
+  pinned.sort((a,b) => sortOrder === 'desc' ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date));
+  unpinned.sort((a,b) => sortOrder === 'desc' ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date));
   displayList = [...pinned, ...unpinned];
   memoList.innerHTML = "";
   if (displayList.length === 0) {
     let emptyMessage = '';
-    if (currentTab === 'all') {
-      emptyMessage = '<div class="empty-state"><div class="empty-state-icon">📝</div><h3>メモがありません</h3><p>新しいメモを作成しましょう</p></div>';
-    } else if (currentTab === 'favorites') {
-      emptyMessage = '<div class="empty-state"><div class="empty-state-icon">⭐</div><h3>お気に入りがありません</h3><p>メモをお気に入りに追加しましょう</p></div>';
-    } else if (currentTab === 'trash') {
-      emptyMessage = '<div class="empty-state"><div class="empty-state-icon">🗑️</div><h3>ゴミ箱は空です</h3><p>削除されたメモは30日後に自動削除されます</p></div>';
-    }
+    if (currentTab === 'all') emptyMessage = '<div class="empty-state"><div class="empty-state-icon">📝</div><h3>メモがありません</h3><p>新しいメモを作成しましょう</p></div>';
+    else if (currentTab === 'favorites') emptyMessage = '<div class="empty-state"><div class="empty-state-icon">⭐</div><h3>お気に入りがありません</h3><p>メモをお気に入りに追加しましょう</p></div>';
+    else if (currentTab === 'trash') emptyMessage = '<div class="empty-state"><div class="empty-state-icon">🗑️</div><h3>ゴミ箱は空です</h3><p>削除されたメモは30日後に自動削除されます</p></div>';
     memoList.innerHTML = emptyMessage;
     return;
   }
   displayList.forEach((memo) => {
     const div = document.createElement('div');
     div.className = 'memo';
-    div.dataset.label = memo.label || '';
     if (memo.pinned && !memo.deleted) div.classList.add('pinned');
-    let bgColor = '';
-    switch(memo.label){
-      case 'yellow': bgColor='#FEF3C7'; break;
-      case 'red': bgColor='#FEE2E2'; break;
-      case 'green': bgColor='#D1FAE5'; break;
-      case 'blue': bgColor='#DBEAFE'; break;
-      default: bgColor='var(--bg-secondary)';
-    }
-    div.style.backgroundColor = bgColor;
-    const date = new Date(memo.date);
-    const dateStr = formatDate(date);
+    div.dataset.label = memo.label || '';
+    const labelColors = { yellow: '#FEF3C7', red: '#FEE2E2', green: '#D1FAE5', blue: '#DBEAFE' };
+    div.style.backgroundColor = labelColors[memo.label] || 'var(--bg-secondary)';
     const memoHeader = document.createElement('div');
     memoHeader.className = 'memo-header';
     const memoContent = document.createElement('div');
     memoContent.className = 'memo-content';
-    const memoText = document.createElement('span');
+    if (memo.title) {
+      const memoTitle = document.createElement('div');
+      memoTitle.className = 'memo-title';
+      memoTitle.textContent = memo.title;
+      memoContent.appendChild(memoTitle);
+    }
+    const textWrapper = document.createElement('div');
+    textWrapper.className = 'memo-text-wrapper';
+    const memoText = document.createElement('div');
     memoText.className = 'memo-text';
-    memoText.textContent = memo.text;
+    memoText.textContent = memo.text || '';
+    textWrapper.appendChild(memoText);
+    memoContent.appendChild(textWrapper);
     const memoMeta = document.createElement('div');
     memoMeta.className = 'memo-meta';
-    const memoDate = document.createElement('span');
-    memoDate.className = 'memo-date';
-    memoDate.textContent = '🕐 ' + dateStr;
-    memoMeta.appendChild(memoDate);
-    memoContent.appendChild(memoText);
+    memoMeta.innerHTML = '🕐 ' + formatDate(new Date(memo.date));
     memoContent.appendChild(memoMeta);
     const memoActions = document.createElement('div');
     memoActions.className = 'memo-actions';
@@ -1305,9 +1209,32 @@ function displayMemos(list = null) {
       div.appendChild(memoImages);
     }
     memoList.appendChild(div);
+    // 折りたたみ処理（超滑らか版）
+    requestAnimationFrame(() => {
+      const fullHeight = memoText.scrollHeight;
+      const lineHeight = parseFloat(getComputedStyle(memoText).lineHeight);
+      const maxDisplayHeight = lineHeight * 3;
+      if (fullHeight > maxDisplayHeight + 10) {
+        textWrapper.classList.add('collapsed');
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'toggle-btn';
+        toggleBtn.textContent = 'もっと見る';
+        toggleBtn.onclick = () => {
+          if (textWrapper.classList.contains('collapsed')) {
+            textWrapper.classList.remove('collapsed');
+            textWrapper.style.maxHeight = (fullHeight + 60) + 'px';
+            toggleBtn.textContent = '折りたたむ';
+          } else {
+            textWrapper.classList.add('collapsed');
+            textWrapper.style.maxHeight = maxDisplayHeight + 'px';
+            toggleBtn.textContent = 'もっと見る';
+          }
+        };
+        textWrapper.appendChild(toggleBtn);
+      }
+    });
   });
 }
-
 function formatDate(date) {
   const now = new Date();
   const diff = now - date;
@@ -1320,14 +1247,12 @@ function formatDate(date) {
   if (days < 7) return `${days}日前`;
   return `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`;
 }
-
 function showImageModal(images, index) {
   currentImageList = images;
   currentImageIndex = index;
   updateModalImage();
   imageModal.style.display = 'flex';
 }
-
 function updateModalImage() {
   modalImage.src = currentImageList[currentImageIndex];
   modalCounter.textContent = `${currentImageIndex + 1} / ${currentImageList.length}`;
@@ -1341,100 +1266,48 @@ function updateModalImage() {
     modalCounter.style.display = 'block';
   }
 }
-
 function closeModal() {
   imageModal.style.display = 'none';
   currentImageList = [];
   currentImageIndex = 0;
 }
-
-modalClose.addEventListener('click', (e) => {
-  e.stopPropagation();
-  closeModal();
-});
-
-modalPrev.addEventListener('click', (e) => {
-  e.stopPropagation();
-  currentImageIndex = (currentImageIndex - 1 + currentImageList.length) % currentImageList.length;
-  updateModalImage();
-});
-
-modalNext.addEventListener('click', (e) => {
-  e.stopPropagation();
-  currentImageIndex = (currentImageIndex + 1) % currentImageList.length;
-  updateModalImage();
-});
-
-imageModal.addEventListener('click', (e) => {
-  if (e.target === imageModal) {
-    closeModal();
-  }
-});
-
+modalClose.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
+modalPrev.addEventListener('click', (e) => { e.stopPropagation(); currentImageIndex = (currentImageIndex - 1 + currentImageList.length) % currentImageList.length; updateModalImage(); });
+modalNext.addEventListener('click', (e) => { e.stopPropagation(); currentImageIndex = (currentImageIndex + 1) % currentImageList.length; updateModalImage(); });
+imageModal.addEventListener('click', (e) => { if (e.target === imageModal) closeModal(); });
 document.addEventListener('keydown', (e) => {
   if (imageModal.style.display === 'flex') {
-    if (e.key === 'Escape') {
-      closeModal();
-    } else if (e.key === 'ArrowLeft') {
-      currentImageIndex = (currentImageIndex - 1 + currentImageList.length) % currentImageList.length;
-      updateModalImage();
-    } else if (e.key === 'ArrowRight') {
-      currentImageIndex = (currentImageIndex + 1) % currentImageList.length;
-      updateModalImage();
-    }
+    if (e.key === 'Escape') closeModal();
+    else if (e.key === 'ArrowLeft') { currentImageIndex = (currentImageIndex - 1 + currentImageList.length) % currentImageList.length; updateModalImage(); }
+    else if (e.key === 'ArrowRight') { currentImageIndex = (currentImageIndex + 1) % currentImageList.length; updateModalImage(); }
   }
 });
-
 let touchStartX = 0;
 let touchEndX = 0;
-
-imageModal.addEventListener('touchstart', (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-}, { passive: true });
-
-imageModal.addEventListener('touchend', (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-  handleSwipe();
-}, { passive: true });
-
+imageModal.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+imageModal.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, { passive: true });
 function handleSwipe() {
-  const swipeThreshold = 50;
   const diff = touchStartX - touchEndX;
-  if (Math.abs(diff) > swipeThreshold && currentImageList.length > 1) {
-    if (diff > 0) {
-      currentImageIndex = (currentImageIndex + 1) % currentImageList.length;
-      updateModalImage();
-    } else {
-      currentImageIndex = (currentImageIndex - 1 + currentImageList.length) % currentImageList.length;
-      updateModalImage();
-    }
+  if (Math.abs(diff) > 50 && currentImageList.length > 1) {
+    if (diff > 0) currentImageIndex = (currentImageIndex + 1) % currentImageList.length;
+    else currentImageIndex = (currentImageIndex - 1 + currentImageList.length) % currentImageList.length;
+    updateModalImage();
   }
 }
-
 async function toggleFavorite(key) {
   const memo = memosData[key];
-  await update(ref(database, `memos/${currentUser.uid}/${key}`), {
-    favorite: !memo.favorite
-  });
+  await update(ref(database, `memos/${currentUser.uid}/${key}`), { favorite: !memo.favorite });
 }
-
 async function togglePin(key) {
   const memo = memosData[key];
-  await update(ref(database, `memos/${currentUser.uid}/${key}`), {
-    pinned: !memo.pinned
-  });
+  await update(ref(database, `memos/${currentUser.uid}/${key}`), { pinned: !memo.pinned });
 }
-
 function openMenu(key, isDeleted) { 
   selectedMemoKey = key; 
   overlay.style.display='block'; 
-  if (isDeleted) {
-    trashMenuDialog.style.display='block';
-  } else {
-    menuDialog.style.display='block';
-  }
+  if (isDeleted) trashMenuDialog.style.display='block';
+  else menuDialog.style.display='block';
 }
-
 function closeDialogs() { 
   overlay.style.display='none'; 
   menuDialog.style.display='none'; 
@@ -1442,7 +1315,6 @@ function closeDialogs() {
   editDialog.style.display='none'; 
   selectedMemoKey = null; 
 }
-
 document.getElementById('deleteBtn').addEventListener('click', async () => {
   if(!selectedMemoKey) return;
   await update(ref(database, `memos/${currentUser.uid}/${selectedMemoKey}`), {
@@ -1451,7 +1323,6 @@ document.getElementById('deleteBtn').addEventListener('click', async () => {
   });
   closeDialogs();
 });
-
 document.getElementById('restoreBtn').addEventListener('click', async () => {
   if(!selectedMemoKey) return;
   await update(ref(database, `memos/${currentUser.uid}/${selectedMemoKey}`), {
@@ -1460,7 +1331,6 @@ document.getElementById('restoreBtn').addEventListener('click', async () => {
   });
   closeDialogs();
 });
-
 document.getElementById('permanentDeleteBtn').addEventListener('click', async () => {
   if(!selectedMemoKey) return;
   if (confirm('このメモを完全に削除しますか?\nこの操作は取り消せません。')) {
@@ -1468,10 +1338,10 @@ document.getElementById('permanentDeleteBtn').addEventListener('click', async ()
     closeDialogs();
   }
 });
-
 document.getElementById('editBtn').addEventListener('click', () => {
   if(!selectedMemoKey) return;
   const memo = memosData[selectedMemoKey];
+  editTitleInput.value = memo.title || "";
   editInput.value = memo.text;
   editLabelSelect.value = memo.label || "";
   editImages = memo.images ? [...memo.images] : [];
@@ -1479,10 +1349,10 @@ document.getElementById('editBtn').addEventListener('click', () => {
   menuDialog.style.display='none';
   editDialog.style.display='block';
 });
-
 document.getElementById('updateBtn').addEventListener('click', async () => {
   if(!selectedMemoKey) return;
   const updates = {
+    title: editTitleInput.value.trim(),
     text: editInput.value,
     label: editLabelSelect.value,
     images: [...editImages]
@@ -1493,22 +1363,17 @@ document.getElementById('updateBtn').addEventListener('click', async () => {
   labelSearchSelect.value = "";
   searchStatus.innerHTML = "";
 });
-
 document.getElementById('sortBtn').addEventListener('click', () => {
   sortOrder = sortOrder==='desc' ? 'asc' : 'desc';
   document.getElementById('sortBtn').textContent = sortOrder==='desc'?'⬇️ 新しい順':'⬆️ 古い順';
   displayMemos();
 });
-
 function performSearch() {
   const keyword = searchInput.value.toLowerCase().trim();
   const selectedLabel = labelSearchSelect.value;
-  let filtered = Object.keys(memosData).map(key => ({
-    key,
-    ...memosData[key]
-  }));
+  let filtered = Object.keys(memosData).map(key => ({key, ...memosData[key]}));
   if (keyword !== "") {
-    filtered = filtered.filter(m => m.text.toLowerCase().includes(keyword));
+    filtered = filtered.filter(m => (m.title && m.title.toLowerCase().includes(keyword)) || m.text.toLowerCase().includes(keyword));
   }
   if (selectedLabel !== "") {
     filtered = filtered.filter(m => m.label === selectedLabel);
@@ -1517,12 +1382,7 @@ function performSearch() {
   if (keyword === "" && selectedLabel === "") {
     searchStatus.innerHTML = "";
   } else {
-    const labelNames = {
-      'yellow': '🟡 黄色',
-      'red': '🔴 赤色',
-      'green': '🟢 緑色',
-      'blue': '🔵 青色'
-    };
+    const labelNames = { 'yellow': '🟡 黄色', 'red': '🔴 赤色', 'green': '🟢 緑色', 'blue': '🔵 青色' };
     let statusText = '🔍 検索中：';
     if (keyword !== "") statusText += `キーワード「${keyword}」 `;
     if (selectedLabel !== "") statusText += `ラベル「${labelNames[selectedLabel]}」 `;
@@ -1530,7 +1390,6 @@ function performSearch() {
     searchStatus.innerHTML = statusText;
   }
 }
-
 searchInput.addEventListener('input', performSearch);
 labelSearchSelect.addEventListener('change', performSearch);
 searchStatus.addEventListener('click', () => {
@@ -1538,7 +1397,6 @@ searchStatus.addEventListener('click', () => {
   labelSearchSelect.value = "";
   performSearch();
 });
-
 document.getElementById('cancelBtn').addEventListener('click', closeDialogs);
 document.getElementById('trashCancelBtn').addEventListener('click', closeDialogs);
 document.getElementById('editCancelBtn').addEventListener('click', closeDialogs);
