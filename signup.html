@@ -1,233 +1,108 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#4CAF50">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-192.png">
-  <title>アカウント作成</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+<script type="module">
+  // 必要な import をまとめて
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+  import { 
+    getAuth,
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
+    setPersistence,
+    browserLocalPersistence,
+    onAuthStateChanged
+  } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 
-    .login-box {
-      background: white;
-      padding: 30px 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-    }
+  // Firebase設定（1回だけ）
+  const firebaseConfig = {
+    apiKey: "AIzaSyAIldTO-8jX6j8gHrOg5D0m-nCCSA-16Go",
+    authDomain: "memoapp-c54e6.firebaseapp.com",
+    databaseURL: "https://memoapp-c54e6-default-rtdb.firebaseio.com",
+    projectId: "memoapp-c54e6",
+    storageBucket: "memoapp-c54e6.firebasestorage.app",
+    messagingSenderId: "490272180038",
+    appId: "1:490272180038:web:f8c82853288e77d9440747"
+  };
 
-    .login-box h2 {
-      margin-bottom: 20px;
-    }
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-    .login-box input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 16px;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    .login-box button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      box-sizing: border-box;
-    }
-
-    .login-box button:hover {
-      background-color: #45a049;
-    }
-
-    .login-box button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-
-    .error-message {
-      color: red;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-
-    .link {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    .link a {
-      color: #4CAF50;
-      text-decoration: none;
-    }
-
-    .link a:hover {
-      text-decoration: underline;
-    }
-
-    .info-message {
-      background: #e3f2fd;
-      border: 2px solid #2196f3;
-      border-radius: 8px;
-      padding: 15px;
-      margin-top: 15px;
-      font-size: 13px;
-      color: #1565c0;
-      text-align: left;
-      line-height: 1.6;
-    }
-
-    .info-message strong {
-      display: block;
-      margin-bottom: 5px;
-      font-size: 14px;
-    }
-
-    @media (max-width: 480px) {
-      .login-box {
-        padding: 20px 15px;
-      }
-      .login-box input, .login-box button {
-        font-size: 14px;
-        padding: 10px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="login-box">
-    <h2>アカウント作成</h2>
-    <input type="email" id="email" placeholder="メールアドレス">
-    <input type="password" id="password" placeholder="パスワード（8〜12文字、英小文字必須）">
-    <button id="createBtn">作成</button>
-    <div class="error-message" id="errorMessage"></div>
-    <div class="info-message">
-      <strong>📧 確認メールについて</strong>
-      登録後、確認メールを送信します。<br>
-      ※ <strong>迷惑メールフォルダ</strong>に振り分けられることがあります。<br>
-      メールが届かない場合は、迷惑メールフォルダをご確認ください。
-    </div>
-    <div class="link">
-      <a href="index.html">既にアカウントをお持ちの方はこちら</a>
-    </div>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-
-    // Firebaseの設定
-    const firebaseConfig = {
-      apiKey: "AIzaSyAIldTO-8jX6j8gHrOg5D0m-nCCSA-16Go",
-      authDomain: "memoapp-c54e6.firebaseapp.com",
-      databaseURL: "https://memoapp-c54e6-default-rtdb.firebaseio.com",
-      projectId: "memoapp-c54e6",
-      storageBucket: "memoapp-c54e6.firebasestorage.app",
-      messagingSenderId: "490272180038",
-      appId: "1:490272180038:web:f8c82853288e77d9440747"
-    };
-
-    // Firebaseを初期化
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    const createBtn = document.getElementById("createBtn");
-    const errorMessage = document.getElementById("errorMessage");
-
-    createBtn.addEventListener("click", async function() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      
-      errorMessage.textContent = "";
-
-      // 入力チェック
-      if (!email || !password) {
-        errorMessage.textContent = "メールアドレスとパスワードを入力してください";
-        return;
-      }
-
-      // パスワードの条件チェック
-      if (password.length < 8 || password.length > 12) {
-        errorMessage.textContent = "パスワードは8〜12文字で入力してください";
-        return;
-      }
-
-      // 英小文字が含まれているかチェック
-      if (!/[a-z]/.test(password)) {
-        errorMessage.textContent = "パスワードには英小文字を含めてください";
-        return;
-      }
-
-      // 大文字、数字、記号の種類をカウント
-      let typeCount = 0;
-      if (/[A-Z]/.test(password)) typeCount++; // 大文字
-      if (/[0-9]/.test(password)) typeCount++; // 数字
-      if (/[^a-zA-Z0-9]/.test(password)) typeCount++; // 記号
-
-      if (typeCount < 2) {
-        errorMessage.textContent = "パスワードには大文字/数字/記号のうち2種類以上を含めてください";
-        return;
-      }
-
-      // ボタンを無効化
-      createBtn.disabled = true;
-      createBtn.textContent = "作成中...";
-
-      try {
-        // Firebaseでユーザーを作成
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        
-        // 確認メールを送信
-        await sendEmailVerification(userCredential.user);
-        
-        // 成功メッセージを表示
-        alert('✅ アカウントを作成しました！\n\n📧 確認メールを送信しました。\nメール内のリンクをクリックして、メールアドレスを確認してください。\n\n※ 迷惑メールフォルダに入っている場合があります。');
-        
-        // ログイン画面に移動
-        window.location.href = "index.html";
-      } catch (error) {
-        // エラー処理
-        let message = "アカウント作成に失敗しました";
-        
-        if (error.code === 'auth/email-already-in-use') {
-          message = "このメールアドレスは既に使用されています";
-        } else if (error.code === 'auth/invalid-email') {
-          message = "メールアドレスの形式が正しくありません";
-        } else if (error.code === 'auth/weak-password') {
-          message = "パスワードが弱すぎます";
-        }
-        
-        errorMessage.textContent = message;
-        createBtn.disabled = false;
-        createBtn.textContent = "作成";
-      }
+  // ★ 永続化を LOCAL に明示設定（ブラウザ閉じても保持）
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      console.log("新規登録画面: ログイン状態を LOCAL に設定（長期間保持）");
+    })
+    .catch((err) => {
+      console.error("永続化設定失敗:", err);
     });
 
-    // Service Workerを登録
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/newmemoapp/service-worker.js')
-        .then(() => console.log('Service Worker 登録成功'))
-        .catch((error) => console.log('Service Worker 登録失敗:', error));
+  // 既にログイン済みならメイン画面へ自動遷移（登録後すぐ飛ばす用）
+  onAuthStateChanged(auth, (user) => {
+    if (user && user.emailVerified) {
+      console.log("登録済み＆認証済み → newmemo.html へ自動移動");
+      window.location.href = "newmemo.html";
     }
-  </script>
-</body>
-</html>
+  });
+
+  const createBtn = document.getElementById("createBtn");
+  const errorMessage = document.getElementById("errorMessage");
+
+  createBtn.addEventListener("click", async function() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    
+    errorMessage.textContent = "";
+
+    if (!email || !password) {
+      errorMessage.textContent = "メールアドレスとパスワードを入力してください";
+      return;
+    }
+
+    if (password.length < 8 || password.length > 12) {
+      errorMessage.textContent = "パスワードは8〜12文字で入力してください";
+      return;
+    }
+
+    if (!/[a-z]/.test(password)) {
+      errorMessage.textContent = "パスワードには英小文字を含めてください";
+      return;
+    }
+
+    let typeCount = 0;
+    if (/[A-Z]/.test(password)) typeCount++;
+    if (/[0-9]/.test(password)) typeCount++;
+    if (/[^a-zA-Z0-9]/.test(password)) typeCount++;
+
+    if (typeCount < 2) {
+      errorMessage.textContent = "パスワードには大文字/数字/記号のうち2種類以上を含めてください";
+      return;
+    }
+
+    createBtn.disabled = true;
+    createBtn.textContent = "作成中...";
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      
+      await sendEmailVerification(userCredential.user);
+      
+      alert('✅ アカウントを作成しました！\n\n📧 確認メールを送信しました。\nメール内のリンクをクリックして認証してください。\n\n※迷惑メールフォルダも確認を！');
+      
+      // ここで即リダイレクトせず、onAuthStateChanged に任せる（認証後自動で飛ぶ）
+      // window.location.href = "index.html";  ← これは削除orコメントアウト推奨
+    } catch (error) {
+      let message = "アカウント作成に失敗しました";
+      
+      if (error.code === 'auth/email-already-in-use') {
+        message = "このメールアドレスは既に使用されています";
+      } else if (error.code === 'auth/invalid-email') {
+        message = "メールアドレスの形式が正しくありません";
+      } else if (error.code === 'auth/weak-password') {
+        message = "パスワードが弱すぎます";
+      } else {
+        console.error("登録エラー詳細:", error.code, error.message);
+      }
+      
+      errorMessage.textContent = message;
+      createBtn.disabled = false;
+      createBtn.textContent = "作成";
+    }
+  });
+</script>
