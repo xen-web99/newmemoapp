@@ -3,9 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#4CAF50">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-192.png">
   <title>ログイン画面</title>
   <style>
     body {
@@ -104,92 +101,118 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+  // 必要な import をまとめて（重複なし）
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+  import { 
+    getAuth,
+    signInWithEmailAndPassword,
+    setPersistence,
+    browserLocalPersistence,
+    onAuthStateChanged
+  } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 
-    // Firebaseの設定
-    const firebaseConfig = {
-      apiKey: "AIzaSyAIldTO-8jX6j8gHrOg5D0m-nCCSA-16Go",
-      authDomain: "memoapp-c54e6.firebaseapp.com",
-      databaseURL: "https://memoapp-c54e6-default-rtdb.firebaseio.com",
-      projectId: "memoapp-c54e6",
-      storageBucket: "memoapp-c54e6.firebasestorage.app",
-      messagingSenderId: "490272180038",
-      appId: "1:490272180038:web:f8c82853288e77d9440747"
-    };
+  // Firebase設定（1回だけ）
+  const firebaseConfig = {
+    apiKey: "AIzaSyAIldTO-8jX6j8gHrOg5D0m-nCCSA-16Go",
+    authDomain: "memoapp-c54e6.firebaseapp.com",
+    databaseURL: "https://memoapp-c54e6-default-rtdb.firebaseio.com",
+    projectId: "memoapp-c54e6",
+    storageBucket: "memoapp-c54e6.firebasestorage.app",
+    messagingSenderId: "490272180038",
+    appId: "1:490272180038:web:f8c82853288e77d9440747"
+  };
 
-    // Firebaseを初期化
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+  // 初期化（1回だけ）
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-    const loginBtn = document.getElementById("loginBtn");
-    const signupBtn = document.getElementById("signupBtn");
-    const errorMessage = document.getElementById("errorMessage");
-
-    // 新規作成ボタン
-    signupBtn.addEventListener("click", function() {
-      window.location.href = "signup.html";
+  // ★ ここが最重要：初期化直後に persistence を設定（デフォルトがlocalでも明示的に）
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      console.log("ログイン状態の永続化を LOCAL に設定しました（ブラウザ閉じても保持）");
+    })
+    .catch((err) => {
+      console.error("永続化設定失敗:", err);
+      // エラーでも続行（稀なケース）
     });
 
-    // ログインボタン
-    loginBtn.addEventListener("click", async function() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      
-      errorMessage.textContent = "";
-
-      if (!email || !password) {
-        errorMessage.textContent = "メールアドレスとパスワードを入力してください";
-        return;
-      }
-
-      loginBtn.disabled = true;
-      loginBtn.textContent = "ログイン中...";
-
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        
-        // メール認証チェック
-        if (!userCredential.user.emailVerified) {
-          errorMessage.textContent = "メールアドレスが未認証です。受信したメールから認証を完了してください。";
-          loginBtn.disabled = false;
-          loginBtn.textContent = "ログイン";
-          return;
-        }
-        
+  // 既にログイン済みなら自動でメイン画面へ（これで毎回ログイン不要に）
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      if (user.emailVerified) {
+        console.log("ログイン済み＆認証済み → newmemo.html へ自動ジャンプ");
         window.location.href = "newmemo.html";
-      } catch (error) {
-        let message = "ログインに失敗しました";
-        
-        if (error.code === 'auth/user-not-found') {
-          message = "ユーザーが見つかりません";
-        } else if (error.code === 'auth/wrong-password') {
-          message = "パスワードが間違っています";
-        } else if (error.code === 'auth/invalid-email') {
-          message = "メールアドレスの形式が正しくありません";
-        } else if (error.code === 'auth/invalid-credential') {
-          message = "メールアドレスまたはパスワードが間違っています";
-        }
-        
-        errorMessage.textContent = message;
+      } else {
+        console.log("ログイン済みですがメール未認証です");
+        // 必要ならここで警告表示など
+      }
+    } else {
+      console.log("未ログイン状態");
+    }
+  });
+
+  // 以降はボタン関連のコード（変更なしでOK）
+  const loginBtn = document.getElementById("loginBtn");
+  const signupBtn = document.getElementById("signupBtn");
+  const errorMessage = document.getElementById("errorMessage");
+
+  signupBtn.addEventListener("click", function() {
+    window.location.href = "signup.html";
+  });
+
+  loginBtn.addEventListener("click", async function() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    
+    errorMessage.textContent = "";
+
+    if (!email || !password) {
+      errorMessage.textContent = "メールアドレスとパスワードを入力してください";
+      return;
+    }
+
+    loginBtn.disabled = true;
+    loginBtn.textContent = "ログイン中...";
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      
+      if (!userCredential.user.emailVerified) {
+        errorMessage.textContent = "メールアドレスが未認証です。受信したメールから認証を完了してください。";
         loginBtn.disabled = false;
         loginBtn.textContent = "ログイン";
+        return;
       }
-    });
-
-    // Enterキーでログイン
-    document.getElementById("password").addEventListener("keypress", function(e) {
-      if (e.key === "Enter") {
-        loginBtn.click();
+      
+      window.location.href = "newmemo.html";
+    } catch (error) {
+      let message = "ログインに失敗しました";
+      
+      if (error.code === 'auth/user-not-found') {
+        message = "ユーザーが見つかりません";
+      } else if (error.code === 'auth/wrong-password') {
+        message = "パスワードが間違っています";
+      } else if (error.code === 'auth/invalid-email') {
+        message = "メールアドレスの形式が正しくありません";
+      } else if (error.code === 'auth/invalid-credential') {
+        message = "メールアドレスまたはパスワードが間違っています";
+      } else {
+        console.error("ログインエラー詳細:", error.code, error.message);
       }
-    });
-
-    // Service Workerを登録
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/newmemoapp/service-worker.js')
-        .then(() => console.log('Service Worker 登録成功'))
-        .catch((error) => console.log('Service Worker 登録失敗:', error));
+      
+      errorMessage.textContent = message;
+      loginBtn.disabled = false;
+      loginBtn.textContent = "ログイン";
     }
-  </script>
+  });
+
+  // Enterキー対応（変更なし）
+  document.getElementById("password").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+      loginBtn.click();
+    }
+  });
+</script>
 </body>
 </html>
+
