@@ -758,6 +758,98 @@ h2 {
     right: 8px;
   }
 }
+/* ===== 選択モード ===== */
+.memo {
+  position: relative;
+}
+
+.select-checkbox {
+  position: absolute;
+  left: 8px;
+  top: 12px;
+  width: 18px;
+  height: 18px;
+  display: none;
+  z-index: 5;
+}
+
+.selection-mode .memo {
+  padding-left: 40px;
+}
+
+.select-checkbox {
+  left: 12px;
+  top: 16px;
+}
+
+
+.memo.selected {
+  background: inherit;
+}
+
+.memo.selected::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-color);
+  border-radius: 4px 0 0 4px;
+}
+
+
+
+/* 選択バー */
+#selectionBar {
+  display: none;
+  position: sticky;
+  top: 0px;
+  z-index: 300;
+  color: rgb(255, 52, 52);
+  padding: 10px 16px;
+  border-radius: 0 0 12px 12px;
+  display: none;
+  gap: 10px;
+  align-items: center;
+}
+
+#selectionBar button {
+  background: white;
+  color: var(--accent-color);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#enterSelectMode {
+  border: 2px solid var(--accent-color);
+  color: var(--accent-color);
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+#enterSelectMode:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.content-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+#memoList {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+
+
   </style>
 </head>
 <body>
@@ -804,7 +896,20 @@ h2 {
   <div id="imagePreview"></div>
 </div>
 <div id="searchSortArea">
+
+</div>
+    <button id="enterSelectMode">☑ 選択</button>
+
+  <div id="selectionBar">
+  <span id="selectionCount">0件選択中</span>
+  <button id="bulkTrash">🗑️ 削除</button>
+  <button id="bulkRestore">♻️ 復元</button>
+  <button id="bulkDelete">❌ 完全削除</button>
+  <button id="bulkCancel">キャンセル</button>
+  </div>
+
   <select id="labelSearchSelect">
+
     <option value="">すべてのラベル</option>
     <option value="yellow">🟡 黄色</option>
     <option value="red">🔴 赤色</option>
@@ -1019,7 +1124,9 @@ function renderImagePreview() {
   imagePreview.innerHTML = '';
   currentImages.forEach((src, index) => {
     const div = document.createElement('div');
-    div.className = 'preview-item';
+div.className = 'memo';
+div.dataset.key = memo.key; // ←これが必須
+
     const img = document.createElement('img');
     img.src = src;
     img.alt = 'preview';
@@ -1119,9 +1226,10 @@ function displayMemos(list = null) {
     displayList = list;
   } else {
     displayList = Object.keys(memosData).map(key => ({
-      key,
-      ...memosData[key]
-    }));
+  key,
+  ...memosData[key]
+}));
+
   }
   if (currentTab === 'all') {
     displayList = displayList.filter(m => !m.deleted);
@@ -1401,6 +1509,170 @@ document.getElementById('cancelBtn').addEventListener('click', closeDialogs);
 document.getElementById('trashCancelBtn').addEventListener('click', closeDialogs);
 document.getElementById('editCancelBtn').addEventListener('click', closeDialogs);
 overlay.addEventListener('click', closeDialogs);
+/* =============================
+   史上最強・選択モード機構
+============================= */
+
+let selectionMode = false;
+let selectedMemos = new Set();
+
+const selectionBar = document.getElementById("selectionBar");
+const selectionCount = document.getElementById("selectionCount");
+
+const bulkTrash = document.getElementById("bulkTrash");
+const bulkRestore = document.getElementById("bulkRestore");
+const bulkDelete = document.getElementById("bulkDelete");
+const bulkCancel = document.getElementById("bulkCancel");
+
+/* 選択モードON */
+function enterSelectionMode(key) {
+  selectionMode = true;
+  selectedMemos.add(key);
+  document.body.classList.add("selection-mode");
+  function updateSelectionUI() {
+  if (!selectionMode || selectedMemos.size === 0) {
+    selectionBar.style.display = "none";
+    return;
+  }
+
+  selectionBar.style.display = "flex";
+  selectionCount.textContent = `${selectedMemos.size}件を選択中`;
+
+  if (currentTab === "trash") {
+    bulkTrash.style.display = "none";
+    bulkRestore.style.display = "inline-block";
+    bulkDelete.style.display = "inline-block";
+  } else {
+    bulkTrash.style.display = "inline-block";
+    bulkRestore.style.display = "none";
+    bulkDelete.style.display = "none";
+  }
+}
+
+  displayMemos();
+}
+
+/* 選択モードOFF */
+function exitSelectionMode() {
+  selectionMode = false;
+  selectedMemos.clear();
+  document.body.classList.remove("selection-mode");
+  updateSelectionUI();
+  displayMemos();
+}
+
+
+/* トグル */
+function toggleSelect(key) {
+  if (selectedMemos.has(key)) selectedMemos.delete(key);
+  else selectedMemos.add(key);
+  updateSelectionUI();
+  displayMemos();
+}
+
+/* UI更新 */
+function updateSelectionUI() {
+  if (!selectionMode) {
+    selectionBar.style.display = "none";
+    return;
+  }
+  selectionBar.style.display = "flex";
+  selectionCount.textContent = `${selectedMemos.size}件選択中`;
+
+  bulkTrash.style.display = currentTab !== "trash" ? "inline-block" : "none";
+  bulkRestore.style.display = currentTab === "trash" ? "inline-block" : "none";
+  bulkDelete.style.display = currentTab === "trash" ? "inline-block" : "none";
+}
+
+/* ===== displayMemos にフック ===== */
+const _origDisplayMemos = displayMemos;
+displayMemos = function(list = null) {
+  _origDisplayMemos(list);
+
+  document.querySelectorAll(".memo").forEach(div => {
+    const key = Object.keys(memosData).find(k => memosData[k] === undefined ? false : div.textContent.includes(memosData[k].text));
+    
+
+    
+    if (!key) return;
+
+    // checkbox
+    let cb = div.querySelector(".select-checkbox");
+    if (!cb) {
+      cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.className = "select-checkbox";
+      div.prepend(cb);
+    }
+
+    cb.checked = selectedMemos.has(div.dataset.key);
+    div.classList.toggle("selected", selectedMemos.has(div.dataset.key));
+
+    /* クリック */
+    div.addEventListener("click", e => {
+      if (!selectionMode) return;
+      e.stopPropagation();
+      toggleSelect(key);
+    });
+
+    /* 長押し（スマホ） */
+    let pressTimer;
+    div.addEventListener("touchstart", () => {
+      pressTimer = setTimeout(() => enterSelectionMode(key), 500);
+    }, { passive: true });
+
+    div.addEventListener("touchend", () => clearTimeout(pressTimer));
+  });
+};
+
+/* ===== 一括操作 ===== */
+bulkTrash.onclick = async () => {
+  for (const key of selectedMemos) {
+    await update(ref(database, `memos/${currentUser.uid}/${key}`), {
+      deleted: true,
+      deletedAt: new Date().toISOString()
+    });
+  }
+  exitSelectionMode();
+};
+
+bulkRestore.onclick = async () => {
+  for (const key of selectedMemos) {
+    await update(ref(database, `memos/${currentUser.uid}/${key}`), {
+      deleted: false,
+      deletedAt: null
+    });
+  }
+  exitSelectionMode();
+};
+
+bulkDelete.onclick = async () => {
+  if (!confirm("完全に削除しますか？")) return;
+  for (const key of selectedMemos) {
+    await remove(ref(database, `memos/${currentUser.uid}/${key}`));
+  }
+  exitSelectionMode();
+};
+
+bulkCancel.onclick = exitSelectionMode;
+
+// ===== 選択モード開始ボタン =====
+const enterSelectModeBtn = document.getElementById("enterSelectMode");
+
+enterSelectModeBtn.onclick = () => {
+  if (!selectionMode) {
+    selectionMode = true;
+    document.body.classList.add("selection-mode");
+    updateSelectionUI();
+    displayMemos();
+    memoDiv.dataset.key = memoKey;
+    const memoDiv = document.createElement("div");
+    memoDiv.className = "memo";
+    memoDiv.dataset.key = memoKey;
+
+  }
+};
 </script>
+
 </body>
 </html>
